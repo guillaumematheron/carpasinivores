@@ -664,7 +664,7 @@ function rayCastBroadPhase(caster, ray) {
         }
       }
     }
-    return (new function() {this.minZBuffer=minZBuffer; this.color=color;});
+    return (new function() {this.minZBuffer2=minZBuffer2; this.color=color;});
   };
 
   if (ray.angle>360) ray.angle-=360;
