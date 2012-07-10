@@ -241,8 +241,15 @@ function Green() {
     if (this.selected) {
       document.getElementById('fatigueSensor').innerHTML=Math.round(this.getFatigue()*1000)/1000;
       document.getElementById('hungerSensor').innerHTML=Math.round(this.getHunger()*1000)/1000;
-      document.getElementById('colorSensor').innerHTML=this.getColor();
-      document.getElementById('smellSensor').innerHTML=Math.round(this.getSmell()*100)/100;
+      var color=this.getColor();
+      document.getElementById('colorSensor').innerHTML='('+color.r+';'+color.g+';'+color.b+')';
+      document.getElementById('colorSensorVisual').style.background='rgb('+Math.floor(color.r*255.0)+','+Math.floor(color.g*255.0)+','+Math.floor(color.b*255.0)+')';
+      if (this.contact!=null) {
+        var smell=new Color((this.contact.element.color==2)?1:0,(this.contact.element.color==1)?1:0,(this.contact.element.color==3)?1:0);
+      }
+      else var smell=new Color(0,0,0);
+      document.getElementById('smellSensor').innerHTML='('+smell.r+';'+smell.g+';'+smell.b+')';
+      document.getElementById('smellSensorVisual').style.background='rgb('+Math.floor(smell.r*255.0)+','+Math.floor(smell.g*255.0)+','+Math.floor(smell.b*255.0)+')';
     }
     if (this.cumulatedFatigueDistance<equilibrumSpeed*deltaTime) this.cumulatedFatigueDistance=0
     else this.cumulatedFatigueDistance-=equilibrumSpeed*deltaTime;
@@ -699,9 +706,21 @@ function rayCastBroadPhase(caster, ray) {
 
   var maxDist=width;
   if (minZBuffer2<=maxDist*maxDist) //TODO hard-code maxDist^2
-    return (color);
+    return (new function() {this.color=color; this.distance2=minZBuffer2});
   else
-    return (-1);
+    return (new function() {this.color=-1; this.distance2=999999});
+}
+
+function Color(r,g,b) {
+  this.r=r;
+  this.g=g;
+  this.b=b;
+  this.setSaturation=function(sat) {
+    if (sat<0) sat=0;
+    this.r*=sat;
+    this.g*=sat;
+    this.b*=sat;
+  }
 }
 
 //Calculates the ray direction and calls the broadphase
@@ -714,9 +733,13 @@ function rayCast(casterDot) {
   //We also need to pass the angle to the raycast broadphase
   ray.angle=(casterDot.rotation)%360; //0=up, 90=left
 
-  var color=rayCastBroadPhase(casterDot,ray);
+  var ret=rayCastBroadPhase(casterDot,ray);
+  var color=ret.color;
+  var rgbColor=new Color((color==2)?1:0,(color==1)?1:0,(color==3)?1:0);
 
-  return (color);
+  rgbColor.setSaturation(1-Math.sqrt(ret.distance2)/200);
+
+  return (rgbColor);
 }
  
 

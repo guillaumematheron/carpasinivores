@@ -31,11 +31,14 @@
 <tr><td>
 <!-- Play/code area -->
 <textarea id="code" rows="26" cols="100">
-if (green.getColor()==3 && !green.seesWater) {green.seesWater=true;}
-if (green.getColor()!=3 && green.seesWater) {green.seesWater=false; green.direction*=-1;}
-green.rotate(green.direction*30);
-green.forward(20);
-green.lastHunger=green.getHunger();
+//var1 : sees water
+//var2 : direction
+//var3 : last hunger
+if (me.getColor().b>0 && !me.var1) {me.var1=true;}
+if (me.getColor().b==0 && me.var1) {me.var1=false; me.var2*=-1;}
+me.rotate(me.var2*30);
+me.forward(20);
+me.var3=me.getHunger();
 </textarea>
 <div id="container" style="width: 300px;"></div>
 </td>
@@ -45,7 +48,9 @@ green.lastHunger=green.getHunger();
   <p>Fatigue : <span id="fatigueSensor"></span></p>
   <p>Hunger : <span id="hungerSensor"></span></p>
   <p>Color : <span id="colorSensor"></span></p>
+  <div id="colorSensorVisual" style="width: 50px; height: 50px;"></div>
   <p>Smell : <span id="smellSensor"></span></p>
+  <div id="smellSensorVisual" style="width: 50px; height: 50px;"></div>
 </div>
 <table><tr><td>
 <textarea id="debug2" rows="15" cols="20"></textarea>

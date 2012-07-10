@@ -1,7 +1,9 @@
 function ia_green_init(green) {
-  green.direction=1;
-  green.seesWater=false;
-  green.lastHunger=green.getHunger();
+  green.var1=0;
+  green.var2=0;
+  green.var3=0;
+  green.var4=0;
+  green.var5=0;
 }
 
 function ia_red_init(red) {
@@ -19,5 +21,5 @@ function ia_red_update(red) {
 var ia_green_update;
 
 function ia_init() {
-  eval("ia_green_update=function (green) {"+document.getElementById("code").value+"}");
+  eval("ia_green_update=function (green) {var me=green;"+document.getElementById("code").value+"}");
 }
