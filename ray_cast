@@ -1,0 +1,94 @@
+So with the "X" method we have 51 cells to test, instead of 45.
+Let A be the set of cells in the raycast field (cells that are selected by the broadphase algorithm).
+Let A_ij be the cell at the coordinnates (i;j) with caster_cell=A_0;0, and the direction is West (so that 5>=i>=-1 and -4<=j<=4).
+Let B_ij the probability that at least one object is in cell A_ij. Suppose B_ij has an uniform density over A, that depends on the overall density of color
+spots in the scene, and is equal to p, so that forall i and j, Pr{A_ij}=p.
+
+Let's consider the following algorithm :
+
+Let xbreak=6
+For x=-1 to 5
+	Let max=(x<2)?2x+5:9
+	For j=0 to max 
+		Let y=(j%2==0)j/2:-(j+1)/2
+		Let n be the number of color dots in the cell A_xy.
+		If n>0, perform narrow phase in cell A_xy and store the result in k (1 if narrow phase found an object, 0 otherwise)
+		If k>0 Then
+			Let zBuffer=the distance between our caster and the object found in narrow phase
+			Let color=the color of the object found in the narrow phase
+			For x2=-1 to 1
+				For y2=-1 to 1
+					If !(x2==0 and y2==0) Then
+						Let x3=x+x2
+						Let y3=y+y2
+						If x3<=5 and x3>=-1 and y3>=-4 and y3<=4 Then
+							Let n2 be the number of color dots in the cell A_x2_y2.
+							If n2>0, perform narrow phase in cell A_x2_y2 and store the result in k2
+							If k2>0 then store in zBuffer_tmp the distance between our caster and the object found in narrow phase
+							If zBuffer_tmp<zBuffer Then
+								zBuffer=zBuffer_tmp
+								color=color of the object found in narrow phase
+							Endif
+						Endif
+					Endif
+				Next
+			Next
+			break to label 'exit'
+		Endif
+	Next
+Next
+Label 'exit'
+
+The only 'costly' instruction is the narrow phase. The complexity of the algorithm thus depends on the number of times this
+instruction is called.
+
+If we suppose that an object is seen, in the mean case :
+	Finding an object in the row x=-1 has the probability 3/51, but if it is the case, 
+		Finding an object in the column y=-1 or y=1 has a probability of 2/3, so Pr{y=-1 or y=1 | x=-1}=2/3
+			Thus, Pr{(y=-1 or y=1) and x=-1}=2/3*3/51=2/51. In that case we'll have to perform a narrow phase in 4p+1 cells.
+		Finding an object in the column y=0 has a probability of 1/3 so we'll hase to perform a narrow phase on 5p+1 cells with a probability of Pr{y=0 and x=-1}=1/51.
+	Finding an object in the row x=-1 and |y|=1 has the probability 2/51 and the cost 4p+1
+	Finding an object in the row x=-1 and y=0   has the probability 1/51 and the cost 5p+1
+	Finding an object in the row x=0 and |y|=2 has the probability 2/51 and the cost 5p+1
+	Finding an object in the row x=0 and |y|=1 has the probability 2/51 and the cost 7p+1
+	Finding an object in the row x=0 and y=0   has the probability 1/51 and the cost 8p+1
+	Finding an object in the row x=1 and |y|=3 has the probability 2/51 and the cost 5p+1
+	Finding an object in the row x=1 and |y|=2 has the probability 2/51 and the cost 7p+1
+	Finding an object in the row x=1 and |y|<=1 has the probability 3/51 and the cost 8p+1
+	Finding an object in the row x=2 and |y|=4 has the probability 2/51 and the cost 4p+1
+	Finding an object in the row x=2 and |y|=3 has the probability 2/51 and the cost 7p+1
+	Finding an object in the row x=2 and |y|<=2 has the probability 5/51 and the cost 8p+1
+	Finding an object in the row x=3 and |y|=4 has the probability 2/51 and the cost 5p+1
+	Finding an object in the row x=3 and |y|<=3 has the probability 7/51 and the cost 8p+1
+	Finding an object in the row x=4 and |y|=4 has the probability 2/51 and the cost 5p+1
+	Finding an object in the row x=4 and |y|<=3 has the probability 7/51 and the cost 8p+1
+	Finding an object in the row x=5 and |y|=4 has the probability 2/51 and the cost 3p+1
+	Finding an object in the row x=5 and |y|<=3 has the probability 7/51 and the cost 5p+1
+
+	If we multiply each probability with its cost and sum it all up, we get X1=328*p/51+1=6.4p+1 where X1 is the random variable designating the number of narrow phases performed.
+
+	With the "+" method we had to explore each of the 45 cells so we had to perform X2=44p+1 narrow phases
+
+In the worst case scenario for "+", in which each cell contains an object that is hit by the narrow phase, we have X1=9 and X2=45
+In the worst case scenario for "X", in which each cell contains an object that is not hit by the narrow phase, we have X1=51 and X2=45.
+
+Let's examine the mean case again, but this time let's suppose p is the probability that a cell contains an object and q the probability that this object
+is seen by the narrow phase. We'll have to make some gross approximations for this case, so we'll assume q=0.1, since about 10 cells can contain a circle that may cross the
+ray, and about half of them have a circle that actually cross the ray.
+	If we ask a narrow phase that fails, we have called a narrow phase for nothing, so for each of the 51 explored cells, we have a probability of p*(1-q) to call an failed narrow phase.
+	If the narrow phase concludes, then we know that we are going to have to perform about 6.4 other narrow phases to check that no surrounding objects collide with the ray before ours.
+	The probability pf_k to find an object before the k-th step is 1-(1-p*q)^k, because p*q is the probability that the ray really collides with an object in each cell.
+	Let's solve 1-(p*q)^k=0.5 over k. We get k=-ln2/ln(1-p*q). For p=0.5 and q=0.1 for instance, we get k=14. This means that for p=0.5 and q=0.1, we'll have to read 14 cells before
+	finding an actual colored object on the ray. Since k can't be greater than 51, we have k=min(-ln2/ln(1-p*q),51)
+	Let's determine the number of failed narrow phases that these 14 cells represent. These cells represent k*p*(1-q) failed narrow phases, which corresponds to 6 narrow phases for
+	nothing in our case. The probability of finding something before the 51-th step is (1-p*q)^51, so the 6.4p+1 narrow phases that we'll have to perform at the end of the algorithm
+	has an expected cost of (6.4*p+1)*(1-(1-p*q)^51). This means that for any configuration, the total number of narrow phases performed is XN=min(-ln2/ln(1-p*q),51)*p*q*(1-q)+(6.4*p+1)*(1-(1-p*q)^51).
+	Again, for p=0.5 and q=0.1, we get XN=4.5
+
+Let's do the same analysis for the "+" algorithm : 
+
+	The "+" algorithm will inevitably perform 45*p narrow phases, so we should solve the inequality min(-ln2/ln(1-p*q),51)*p*q*(1-q)+(6.4*p+1)*(1-(1-p*q)^51)<45*p.
+	Wolfram|Alpha tells us that this is always true except in very exceptionnal cases such as p=0.005 and q=0.7
+
+To conclude, the "X" algorithm is always better than the "+" algorithm
+
