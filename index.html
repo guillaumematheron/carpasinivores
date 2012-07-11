@@ -1,45 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no"> 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <script type="text/javascript" src="constants.js"></script>
-    <script type="text/javascript" src="enchant.js"></script>
-    <script type="text/javascript" src="canvas.enchant.js"></script>
-    <script type="text/javascript" src="linkedlist.js"></script>
-    <script type="text/javascript" src="graphics_abstract_enchantjs.js"></script>
-    <script type="text/javascript" src="god.js"></script>
-    <script type="text/javascript" src="ia.js"></script>
-    <script type="text/javascript" src="main.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        .controlPanel {
-          border: 1px solid black;
-          width: 500px;
-        }
-        #debug2 {
-          display:block;
-        }
-    </style>
+  <title>Les carpasinivores</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no"> 
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <script type="text/javascript" src="constants.js"></script>
+  <script type="text/javascript" src="enchant.js"></script>
+  <script type="text/javascript" src="canvas.enchant.js"></script>
+  <script type="text/javascript" src="linkedlist.js"></script>
+  <script type="text/javascript" src="graphics_abstract_enchantjs.js"></script>
+  <script type="text/javascript" src="god.js"></script>
+  <script type="text/javascript" src="ia.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+  <style type="text/css">
+      body {
+          margin: 0;
+          padding: 0;
+      }
+      .controlPanel {
+        border: 1px solid black;
+        width: 500px;
+      }
+      #debug2 {
+        display:block;
+      }
+  </style>
 </head>
-<body>
+<body onload="loaded();">
 <table>
 <tr><td>
 <!-- Play/code area -->
-<textarea id="code" rows="26" cols="100">
-//var1 : sees water
-//var2 : direction
-//var3 : last hunger
-if (me.getColor().b>0 && !me.var1) {me.var1=true;}
-if (me.getColor().b==0 && me.var1) {me.var1=false; me.var2*=-1;}
-me.rotate(me.var2*30);
-me.forward(20);
-me.var3=me.getHunger();
+<textarea id="code" rows="34" cols="90">
 </textarea>
+<br /><input id="resetCode" type="button" value="Reset to default code" onclick="confirm('You\'ll lose all your code !') && resetCode();" />
 <div id="container" style="width: 300px;"></div>
 </td>
 <td>
@@ -47,17 +41,22 @@ me.var3=me.getHunger();
 <div class="controlPanel">
   <p>Fatigue : <span id="fatigueSensor"></span></p>
   <p>Hunger : <span id="hungerSensor"></span></p>
-  <p>Color : <span id="colorSensor"></span></p>
-  <div id="colorSensorVisual" style="width: 50px; height: 50px;"></div>
-  <p>Smell : <span id="smellSensor"></span></p>
-  <div id="smellSensorVisual" style="width: 50px; height: 50px;"></div>
+  <p>Pain : <span id="painSensor"></span></p>
+  <p>Bébémania : <span id="lustSensor"></span></p>
+  <table><tr><td>Color : <span id="colorSensor"></span></td><td>
+  <div id="colorSensorVisual" style="width: 50px; height: 30px;"></div></td></tr></table>
+  <table><tr><td>Smell : <span id="smellSensor"></span></td><td>
+  <div id="smellSensorVisual" style="display: block; width: 50px; height: 30px;"></div></td></tr></table>
 </div>
 <table><tr><td>
 <textarea id="debug2" rows="15" cols="20"></textarea>
-</td><td>
+</td><td style="border : 1px solid black">
 <!-- Initial values form -->
-<form>
-<table><tr><td><label for="width">Width</label></td><td><input type="text" value="15" id="width" size="5" /></td></tr>
+<form id="paramsForm" >
+<table>
+<tr><td><label for="gameMode">Game mode</label></td><td><select id="gameMode">
+<option value="species">Survival of the species</option><option value="survival">Survival of an individual</option></select></td></tr>
+<tr><td><label for="width">Width</label></td><td><input type="text" value="15" id="width" size="5" /></td></tr>
 <tr><td><label for="height">Height</label></td><td><input type="text" value="10" id="height" size="5" /></td></tr>
 <tr><td><label for="rain">Rain factor</label></td><td><input type="text" value="0.05" id="rain" size="5" /></td></tr>
 <tr><td><label for="kill">Kill factor</label></td><td><input type="text" value="0.4" id="kill" size="5" /></td></tr>
@@ -67,17 +66,25 @@ me.var3=me.getHunger();
 <tr><td><label for="red">Red population</label></td><td><input type="text" value="6" id="red" size="5" /></td></tr>
 <tr><td><label for="water">Initial water</label></td><td><input type="text" value="5" id="water" size="5" /></td></tr>
 </table>
-</form>
+<input type="button" value="Reset to default settings" onclick="confirm('You\'ll lose all your settings !') && document.getElementById('paramsForm').reset();" id="resetParams" />
 </form>
 </td></table>
 </td></tr>
 <tr><td colspan="2">
 <!-- Status area -->
 <input type="button" name="start" value="start" id="start" onclick="startClicked();" />
-<input type="button" name="stop" value="stop" id="stop" onclick="stop();" style="display: none" />
+<input type="button" name="stop" value="stop" id="stop" onclick="stop();" style="display: none; margin-right: 50px;" />
 <input type="button" name="retry" value="retry" id="retry" onclick="location.reload(true);" style="display:none" />
-<span id="info"></span>
+<span id="info" style="max-width: 500px;"></span>
 </td></tr></table>
+
+
+<p>
+  <a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS3</a>&nbsp;
+  <a href="http://validator.w3.org/check?uri=http%3A%2F%2F198.245.54.228%2Fcarpasinivores%2F;verbose=1">Valid HTML5</a>
+</p>
+
+
 </body>
 </html>
 

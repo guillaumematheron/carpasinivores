@@ -22,10 +22,10 @@ You can use the following functions on the variable 'me' to act on the element :
 
 Note : the sensors are not updated during the frame, so you cannot perform a full rotation in just one frame and sample the color every 10° like this for instance : 
 
-    for (var i=0; i\<360; i+=10) {
+    for (var i=0; i<360; i+=10) {
         me.rotate(10);
         //This won't work : me.getColor() is not updated during the frame
-        if (me.getColor().b\>0) {
+        if (me.getColor().b>0) {
             //...
         }
     }

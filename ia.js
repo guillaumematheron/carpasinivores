@@ -6,6 +6,19 @@ function ia_green_init(green) {
   green.var5=0;
 }
 
+//In survival mode, this program is used to control the 'automatic' green elements
+function ia_green_update_auto(me) {
+  //var1 : sees water
+  //var2 : direction
+  //var3 : last hunger
+  if (me.age==0) {me.var1=false; me.var2=1; me.var3=me.getHunger();}
+  if (me.getColor().b>0 && !me.var1) {me.var1=true;}
+  if (me.getColor().b==0 && me.var1) {me.var1=false; me.var2*=-1;}
+  me.rotate(me.var2*30);
+  me.forward(20);
+  me.var3=me.getHunger();
+}
+
 function ia_red_init(red) {
   red.direction=1;
   red.seesWater=false;
@@ -18,8 +31,20 @@ function ia_red_update(red) {
   red.forward(10);
 }
 
-var ia_green_update;
+var ia_green_update_user;
+var userCode;
 
 function ia_init() {
-  eval("ia_green_update=function (green) {var me=green;"+document.getElementById("code").value+"}");
+  userCode=document.getElementById('code').value;
+  ia_green_update_user=function (me) {
+    try {
+      eval(userCode);
+    }
+    catch (err) {
+      window.alert(err);
+      stop();
+      return (false);
+    }
+    return (true);
+  }
 }

@@ -12,15 +12,7 @@ var aliveReds=0;
 var matrixCellSize=40;
 
 //Allocate matrix
-var matrixW=width/matrixCellSize;
-var matrixH=height/matrixCellSize;
-var matrix=new Array(matrixW);
-for (var i=0; i<matrixW; i++) {
-  matrix[i]=new Array(matrixH);
-  for (var j=0; j<matrixH; j++) {
-    matrix[i][j]=new LinkedList();
-  }
-}
+var matrixW, matrixH, matrix;
 
 //Returns the LinkedList associated with a position
 function getMatrixCell(x,y) {
@@ -75,6 +67,7 @@ function registerWater(w) {
 //Deletes the first cadaver on the queue if it has expired, and schedules the next 'cleanup' to 0.1 seconds after the next cadaver expires
 //This function should be called whenever a cadaver is created, it is the only one on the scene
 function manageCadavers() {
+  if (stopped) return;
   if (listOfCadavers.length==0) return;
   if (listOfCadavers.first.data.decompositionDate<=time()) {
     colorDots.remove(listOfCadavers.first.data.element.colorDotsContainer);
@@ -149,7 +142,15 @@ function updateGod(deltaTime) {
     timeStart=time();
     //TODO send signal to red spot if hit
     green.data.update(deltaTime);
-    ia_green_update(green.data);
+    if (gameMode=='species') {
+      if (ia_green_update_user(green.data)==false) return;
+    }
+    else if (gameMode=='survival' && green.data.selected==true) {
+      if (ia_green_update_user(green.data)==false) return;
+    }
+    else if (gameMode=='survival' && green.data.selected==false) {
+      ia_green_update_auto(green.data);
+    }
     greenPeopleUpdateTime+=time()-timeStart;
 
     timeStart=time();
@@ -176,8 +177,7 @@ function updateGod(deltaTime) {
         if (ret.nearestObject.hunger-eatFactor*deltaTime>0) {
           //By managing every collision from the 'green' update loop, we prevent any collision detection that does not involve a green element, but we significantly increase performance
           ret.nearestObject.hunger-=eatFactor*deltaTime;
-          //TODO for the moment we do not use the 'pain' property of the green, we make it more hungry when it touches a red element
-          green.data.hunger+=killFactor*deltaTime;
+          green.data.pain+=killFactor*deltaTime;
         }
         else ret.nearestObject.hunger=0;
       }
@@ -186,16 +186,14 @@ function updateGod(deltaTime) {
         var green1=green.data;
         var green2=ret.nearestObject;
         //TODO we could use this random factor to limit the baby-boom, but for the moment it is pretty good
-        //It is possible (in theory) to change these '0.4' values but it is risky since the 'lust' property is not used and babies could spawn exponentially
-        if (Math.random()<1 && green1.hunger<0.4 && green2.hunger<0.4) {
+        if (Math.random()<1 && green1.lust>0.9 && green2.lust>0.9) {
           var green3=new Green();
           //In theory, this big leap will be solved automatically, even if the baby (obviously overlaps the parent)
           //However, the fact that two elements are at the exact same position makes it difficult for the raycast to do its job, so we shift the baby of a few pixels
           //  (but maybe it was only true with the new broadphase algorithm ?)
           green3.element.move(green1.element.x+2,green1.element.y+2);
-          //Making babies make the green elements hungry, or they would create babies exponentially since the 'lust' is not used
-          green1.hunger+=0.4;
-          green2.hunger+=0.4;
+          green1.lust=0;
+          green2.lust=0;
           green3.element.rotate(Math.random()*360);
           green3.hunger=0.5;
           ia_green_init(green3);
@@ -204,14 +202,25 @@ function updateGod(deltaTime) {
     }
     greenPeopleCollTime+=time()-timeStart;  //Benchmark
 
-    //If the green elements is dying of hunger
-    if (green.data.getHunger()>1.0) {
+    //If the green elements is dying of hunger or pain
+    if (green.data.getHunger()>1.0 || green.data.getPain()>1.0) {
       aliveGreens--;
       listOfGreenPeople.remove(green);
       //TODO create a queue of dead elements, set a timer to a 0.1s after the front element should be popped
       //colorDots.remove(green.data.element.colorDotsContainer);
       //getMatrixCell(green.data.element.x,green.data.element.y).remove(green.data.matrixContainer);
       green.data.die(); //TODO delete sprite
+      if (green.data.selected) {
+        if (gameMode=='survival') {
+          stop();
+        }
+        else {
+          if (listOfGreenPeople.first!=null) {
+            listOfGreenPeople.first.data.selected=true;
+            listOfGreenPeople.first.data.element.changeImage('green_selected.png');
+          }
+        }
+      }
       green.data.decompositionDate=time()+decompositionTime;
       listOfCadavers.pushBack(green.data);
       if (listOfCadavers.length==1) {
@@ -262,7 +271,8 @@ function updateGod(deltaTime) {
   }
 
   if (frame%10==0) {
-    document.getElementById('info').innerHTML=listOfGreenPeople.length+' greens, '+listOfRedPeople.length+' reds, '+Math.round(1.0/deltaTime)+' fps and '+Math.round(100*colorDots.length/(matrixW*matrixH))/100+' color dots per cell. We got an average q='+Math.round(100*qsum/qcount)/100+'. Performed '+gNarrowPhases+' narrow phases ('+gNarrowPhases_+' successful), plus '+gNarrowPhases2+' ('+gNarrowPhases2_+' successful) after finding a first match, which makes '+(gNarrowPhases+gNarrowPhases2)+' narrow phases in total.\n';
+    // document.getElementById('info').innerHTML=listOfGreenPeople.length+' greens, '+listOfRedPeople.length+' reds, '+Math.round(1.0/deltaTime)+' fps and '+Math.round(100*colorDots.length/(matrixW*matrixH))/100+' color dots per cell. We got an average q='+Math.round(100*qsum/qcount)/100+'. Performed '+gNarrowPhases+' narrow phases ('+gNarrowPhases_+' successful), plus '+gNarrowPhases2+' ('+gNarrowPhases2_+' successful) after finding a first match, which makes '+(gNarrowPhases+gNarrowPhases2)+' narrow phases in total.';
+    document.getElementById('info').innerHTML=listOfGreenPeople.length+' greens, '+listOfRedPeople.length+' reds, '+Math.round(1.0/deltaTime)+' fps and '+Math.round(100*colorDots.length/(matrixW*matrixH))/100+' color dots per cell.';
     document.getElementById('debug2').value+=listOfGreenPeople.length+','+listOfRedPeople.length+','+Math.round(1.0/deltaTime)+','+Math.round(100*colorDots.length/(matrixW*matrixH))/100+','+Math.round(100*qsum/qcount)/100+'\n';
   }
 

@@ -43,10 +43,12 @@ function LinkedList() {
       this.last.next=null;
     }
     else {
-      //Error : pretty much means we are trying to remove an object that is not part of the list
+      //FIXME Error : pretty much means we are trying to remove an object that is not part of the list. Happens when there is too much overlap
       if (linkedlistelement.next==null || linkedlistelement.previous==null) backtrace();
-      linkedlistelement.next.previous=linkedlistelement.previous;
-      linkedlistelement.previous.next=linkedlistelement.next;
+      else {
+        linkedlistelement.next.previous=linkedlistelement.previous;
+        linkedlistelement.previous.next=linkedlistelement.next;
+      }
     }
     this.length--;
   }

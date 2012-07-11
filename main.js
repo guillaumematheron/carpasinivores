@@ -12,6 +12,25 @@ function time() {
   return (new Date().getTime())/1000.0;
 }
 
+function getCookie(c_name) {
+  var i,x,y,ARRcookies=document.cookie.split(";");
+  for (i=0;i<ARRcookies.length;i++) {
+    x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+    y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+    x=x.replace(/^\s+|\s+$/g,"");
+    if (x==c_name) {
+      return unescape(y);
+    }
+  }
+}
+
+function setCookie(c_name,value,exdays) {
+  var exdate=new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+  document.cookie=c_name + "=" + c_value;
+}
+
 function stop() {
   stopped=true;
   document.getElementById('retry').style.display="";
@@ -39,7 +58,39 @@ function positionElement(element, x, y, w, h) {
 }
 
 //Entry point
+function loaded() {
+  var code=getCookie('code');
+  if (code!=null && code!='')
+    document.getElementById('code').innerHTML=code;
+  else
+    resetCode();
+
+  var cookie=getCookie('params');
+  if (cookie!=null && cookie!='') {
+    var fields=cookie.split(';');
+    for (i in fields) {
+      if (fields[i]=='') continue;
+      if (fields[i].split(',')[0]==null || fields[i].split(',')[0]=='') continue;
+      document.getElementById(fields[i].split(',')[0]).value=fields[i].split(',')[1];
+    }
+  }
+}
+
+function resetCode() {
+  var defaultCode="//var1 : sees water\n";
+  defaultCode+="//var2 : direction\n";
+  defaultCode+="//var3 : last hunger\n";
+  defaultCode+="if (me.age==0) {me.var1=false; me.var2=1; me.var3=me.getHunger();}\n";
+  defaultCode+="if (me.getColor().b>0 && !me.var1) {me.var1=true;}\n";
+  defaultCode+="if (me.getColor().b==0 && me.var1) {me.var1=false; me.var2*=-1;}\n";
+  defaultCode+="me.rotate(me.var2*30);\n";
+  defaultCode+="me.forward(20);\n";
+  defaultCode+="me.var3=me.getHunger();\n";
+  document.getElementById('code').value=defaultCode;
+}
+
 function startClicked() {
+  gameMode=document.getElementById('gameMode').value;
   width=40*document.getElementById('width').value;
   height=40*document.getElementById('height').value;
   rainFactor=document.getElementById('rain').value;
@@ -49,7 +100,35 @@ function startClicked() {
   initialGreen=document.getElementById('green').value;
   initialRed=document.getElementById('red').value;
   initialWater=document.getElementById('water').value;
-  g_init(width,height,30,Array('gray.png','red.png','water.png','green.png','eye.png'),init,updateWide);
+  g_init(width,height,30,Array('green_selected.png','gray.png','red.png','water.png','green.png','eye.png'),init,updateWide);
+
+  var cookie='';
+  var formNode=document.getElementById('paramsForm');
+  var fields=formNode.getElementsByTagName('input');
+  var fields2=formNode.getElementsByTagName('select');
+  for (i in fields) {
+    if (fields[i].id==undefined) continue;
+    cookie+=fields[i].id+','+fields[i].value+';';
+    fields[i].disabled=true;
+  }
+  for (i in fields2) {
+    if (fields2[i].id==undefined) continue;
+    cookie+=fields2[i].id+','+fields2[i].value+';';
+    fields2[i].disabled=true;
+  }
+  setCookie('params',cookie,3650);
+  setCookie('code',document.getElementById('code').value,3650);
+
+  //Allocate matrix
+  matrixW=width/matrixCellSize;
+  matrixH=height/matrixCellSize;
+  matrix=new Array(matrixW);
+  for (var i=0; i<matrixW; i++) {
+    matrix[i]=new Array(matrixH);
+    for (var j=0; j<matrixH; j++) {
+      matrix[i][j]=new LinkedList();
+    }
+  }
 }
 
 function backtrace() {
@@ -72,6 +151,8 @@ function updateWide() {
 //Called by the graphics abstraction layer when the resources are loaded
 function init() {
   document.getElementById('stop').style.display="";
+  document.getElementById('resetCode').style.display="none";
+  document.getElementById('resetParams').style.display="none";
 
   //Init IA
   ia_init();
@@ -86,14 +167,15 @@ function init() {
   for (var i=0; i<initialWater; i++) {
     var w=new Water();
     w.element.move(Math.random()*width,Math.random()*height);
-   // w.element.move(200,100);
   }
   for (var i=0; i<initialGreen; i++) {
     var e=new Green();
     e.element.move(Math.random()*width,Math.random()*height);
     e.element.rotate(Math.random()*360);
- //   e.element.move(200,200);
- //   e.element.rotate(5);
+    if (i==0) {
+      e.selected=true;
+      e.element.changeImage('green_selected.png');
+    }
   }
   for (var i=0; i<initialRed; i++) {
     var r=new Red();
@@ -234,7 +316,7 @@ function Green() {
   this.type='green';
   //Speed at which moving is not tiring
   equilibrumSpeed=10;
-  this.selected=true;
+  this.selected=false;
   //Updates somesthetic sensors such as hunder and fatigue
   this.update=function(deltaTime) {
     this.element.update();
@@ -242,19 +324,23 @@ function Green() {
       document.getElementById('fatigueSensor').innerHTML=Math.round(this.getFatigue()*1000)/1000;
       document.getElementById('hungerSensor').innerHTML=Math.round(this.getHunger()*1000)/1000;
       var color=this.getColor();
-      document.getElementById('colorSensor').innerHTML='('+color.r+';'+color.g+';'+color.b+')';
+//      document.getElementById('colorSensor').innerHTML='('+color.r+';'+color.g+';'+color.b+')';
       document.getElementById('colorSensorVisual').style.background='rgb('+Math.floor(color.r*255.0)+','+Math.floor(color.g*255.0)+','+Math.floor(color.b*255.0)+')';
-      if (this.contact!=null) {
-        var smell=new Color((this.contact.element.color==2)?1:0,(this.contact.element.color==1)?1:0,(this.contact.element.color==3)?1:0);
-      }
-      else var smell=new Color(0,0,0);
-      document.getElementById('smellSensor').innerHTML='('+smell.r+';'+smell.g+';'+smell.b+')';
+      var smell=this.getSmell();
+//      document.getElementById('smellSensor').innerHTML='('+smell.r+';'+smell.g+';'+smell.b+')';
       document.getElementById('smellSensorVisual').style.background='rgb('+Math.floor(smell.r*255.0)+','+Math.floor(smell.g*255.0)+','+Math.floor(smell.b*255.0)+')';
+      document.getElementById('painSensor').innerHTML=Math.round(this.getPain()*1000)/1000;
+      document.getElementById('lustSensor').innerHTML=Math.round(this.getLust()*1000)/1000;
     }
     if (this.cumulatedFatigueDistance<equilibrumSpeed*deltaTime) this.cumulatedFatigueDistance=0
     else this.cumulatedFatigueDistance-=equilibrumSpeed*deltaTime;
 
     this.hunger+=0.02*deltaTime;
+    this.pain-=0.01*deltaTime;
+    if (this.pain<0) this.pain=0;
+    this.lust+=0.02*deltaTime;
+    if (this.lust>1) this.lust=1;
+    this.age++;
   }
   this.forward=function (d) {
     this.element.forward(d*gDeltaTime);
@@ -265,6 +351,7 @@ function Green() {
     this.element.changeImage('gray.png');
     this.element.eye.hide();
     this.color=4;
+    this.element.color=4;
     this.type='cadaver';
   }
   this.decompose=function() {
@@ -282,6 +369,7 @@ function Green() {
   this.lust=0;
   this.smell=0;
   this.rayCastCacheDate=-1;
+  this.age=-1;
   //Somesthesic sensors
   this.getHunger=function() {return (this.hunger);}
   this.getFatigue=function() {return Math.min(1.035-Math.exp((-this.cumulatedFatigueDistance+300*Math.log(1.035))/300.0),1);}
@@ -294,7 +382,12 @@ function Green() {
     return (10000/((distance+100)*(distance+100))-0.0093);
   }
   this.getSmell=function() {
-    //TODO Do smellmap
+    if (this.contact!=null) {
+      var smell=new Color((this.contact.element.color==2)?1:0,(this.contact.element.color==1)?1:0,(this.contact.element.color==3)?1:0);
+      if (this.contact.element.color==4) smell=new Color(1,1,1);
+    }
+    else var smell=new Color(0,0,0);
+    return (smell);
   }
   this.getColor=function() {
     //We store a cached copy of what the green element 'sees'. The cache lifetime is one frame
@@ -326,7 +419,12 @@ function Red() {
     return (10000/((distance+100)*(distance+100))-0.0093);
   }
   this.getSmell=function() {
-    //TODO do smell map
+    if (this.contact!=null) {
+      var smell=new Color((this.contact.element.color==2)?1:0,(this.contact.element.color==1)?1:0,(this.contact.element.color==3)?1:0);
+      if (this.contact.element.color==4) smell=new Color(1,1,1);
+    }
+    else var smell=new Color(0,0,0);
+    return (smell);
   }
   this.getHunger=function() {return (this.hunger);}
   this.getColor=function() {return (rayCast(this.element));}
@@ -478,8 +576,11 @@ function distance(a,b) {
 
 //Performs a narrow-phase raycast on a specific pair of objects
 //TODO take as a parameter the shift to operate
-function rayCastNarrowPhase(casterDot,receiverDot,ray) {
-  var iterations=1;
+function rayCastNarrowPhase(casterDot,receiverDot,ray,shiftx,shifty) {
+  if (shiftx==undefined || shifty==undefined)
+    var iterations=1;
+  else
+    var iterations=-1;
   var minDist2=999999;
   move=function(x,y) {
     var bakx=receiverDot.x;
@@ -493,16 +594,29 @@ function rayCastNarrowPhase(casterDot,receiverDot,ray) {
   }
   var minIX, minIY;
   var minPos=new function() {this.x=0; this.y=0;};
-  //Shift the scene several time to be able to detect an object that is on the other side of an edge
-  for (var ix=-iterations; ix<=iterations; ix++) {
-    for (var iy=-iterations; iy<=iterations; iy++) {
-      var d2=move(ix*width,iy*height);
-      if (d2<minDist2) {
-        minDist2=d2;
-        minIX=ix;
-        minIY=iy;
-        minPos.x=receiverDot.x+width*ix;
-        minPos.y=receiverDot.y+height*iy;
+  if (iterations==-1) {
+    var ix=shiftx;
+    var iy=shifty;
+    var d2=move(ix*width,iy*height);
+    if (d2<minDist2) {
+      minDist2=d2;
+      minIX=ix;
+      minIY=iy;
+      minPos.x=receiverDot.x+width*ix;
+      minPos.y=receiverDot.y+height*iy;
+    }
+  }
+  else {
+    for (var ix=-iterations; ix<=iterations; ix++) {
+      for (var iy=-iterations; iy<=iterations; iy++) {
+        var d2=move(ix*width,iy*height);
+        if (d2<minDist2) {
+          minDist2=d2;
+          minIX=ix;
+          minIY=iy;
+          minPos.x=receiverDot.x+width*ix;
+          minPos.y=receiverDot.y+height*iy;
+        }
       }
     }
   }
@@ -574,14 +688,16 @@ function rayCastBroadPhase_new(caster, ray, x, y) {
         var x=ox;
       }
       //console.log('exploring cell at '+caster.x+' '+caster.y+' '+x+' '+y);
-      var cell=getMatrixCellShifted(caster.x,caster.y,x,y);
+      //To store a potention shift
+      var modVec=new Vector();
+      var cell=getMatrixCellShifted(caster.x,caster.y,x,y,modVec);
       alreadyChecked[x][y]=true;
       if (cell.length!=0) {
         for (var dot=cell.first; dot!=null; dot=dot.next) {
           if (caster!=dot.data.element) {
             drawLine=true;
             //console.log('narrow');
-            var ret=rayCastNarrowPhase(caster,dot.data.element,ray);
+            var ret=rayCastNarrowPhase(caster,dot.data.element,ray,modVec.x,modVec.y);  //TESTME tell how to shift
             qcount++;
             gNarrowPhases++;
             if (ret.isOnRay==true && ret.distance2<Math.pow(5*matrixCellSize,2)) {  //TODO (5*matricCellSize)^2 is constant, hard-code it
@@ -597,11 +713,13 @@ function rayCastBroadPhase_new(caster, ray, x, y) {
                     var y3=y+y2;
                     if (alreadyChecked[x3][y3]==false) {
                       //TODO with swap : if (x3<=5 && x3>=-1 && y3>=-4 && y3<=4) {
-                        var cell2=getMatrixCellShifted(caster.x,caster.y,x3,y3);
+                        //To store a potention shift
+                        var modVec=new Vector();
+                        var cell2=getMatrixCellShifted(caster.x,caster.y,x3,y3,modVec);
                         if (cell.length!=0) {
                           for (var dot2=cell.first; dot2!=null; dot2=dot2.next) {
                             gNarrowPhases2++;
-                            var ret2=rayCastNarrowPhase(caster,dot2.data.element,ray);
+                            var ret2=rayCastNarrowPhase(caster,dot2.data.element,ray,modVec.x,modVec.y);
                             if (ret2.isOnRay==true) {
                               gNarrowPhases2_++;
                               var zBufferTemp2=ret2.distance2;
@@ -651,15 +769,18 @@ function rayCastBroadPhase(caster, ray) {
     var bakx=x, baky=y;
     x+=Math.floor(caster.x/matrixCellSize);
     y+=Math.floor(caster.y/matrixCellSize);
-    if (x<0) x+=matrixW;
-    if (y<0) y+=matrixH;
-    if (x>=matrixW) x-=matrixW;
-    if (y>=matrixH) y-=matrixH;
+    var modVec=new Vector();
+    if (x<0) {x+=matrixW; modVec.x-=1;}
+    if (y<0) {y+=matrixH; modVec.y-=1;}
+    if (x>=matrixW) {x-=matrixW; modVec.x+=1;}
+    if (y>=matrixH) {y-=matrixH; modVec.y+=1;}
+    //TODO see why matrixW is not correct
+    //To store a potential shift
     var cell=getMatrixCell(x*matrixCellSize,y*matrixCellSize);
     for (dot=cell.first; dot!=null; dot=dot.next) {
       if (caster!=dot.data.element) { //FIXME
         gNarrowPhases++;
-        var ret=rayCastNarrowPhase(caster,dot.data.element,ray);  //FIXME
+        var ret=rayCastNarrowPhase(caster,dot.data.element,ray,modVec.x,modVec.y);  //FIXME
         qcount++;
         if (ret.isOnRay==true) {
           gNarrowPhases_++;
@@ -736,9 +857,9 @@ function rayCast(casterDot) {
   var ret=rayCastBroadPhase(casterDot,ray);
   var color=ret.color;
   var rgbColor=new Color((color==2)?1:0,(color==1)?1:0,(color==3)?1:0);
+  if (color==4) rgbColor=new Color(1,1,1);  //Wall or cadaver
 
   rgbColor.setSaturation(1-Math.sqrt(ret.distance2)/200);
-
   return (rgbColor);
 }
  
