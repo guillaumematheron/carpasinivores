@@ -1,0 +1,2 @@
+#!/bin/bash
+sed -i -e 's/à/\&agrave;/g' -e 's/â/\&acirc;/g' -e 's/À/\&Agrave;/g' -e 's/Â/\&Acirc;/g' -e 's/é/\&eacute;/g' -e 's/è/\&egrave;/g' -e 's/ê/\&ecirc;/g' -e 's/ë/\&euml;/g' -e 's/É/\&Eacute;/g' -e 's/È/\&Egrave;/g' -e 's/Ê/\&Ecirc;/g' -e 's/Ë/\&Euml;/g' -e 's/î/\&icirc;/g' -e 's/ï/\&iuml;/g' -e 's/Î/\&Icirc;/g' -e 's/Ï/\&Iuml;/g' -e 's/ô/\&ocirc;/g' -e 's/Ô/\&Ocirc;/g' -e 's/ù/\&ugrave;/g' -e 's/û/\&ucirc;/g' -e 's/Ù/\&Ugrave;/g' -e 's/Û/\&Ucirc;/g' -e 's/ç/\&ccedil;/g' -e 's/Ç/\&Ccedil;/g' $1
