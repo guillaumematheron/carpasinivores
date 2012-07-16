@@ -9,7 +9,7 @@ Un exemple de lien est par exemple :
 
     file:///D:/carpasinivores/#params=width,8;height,8;rain,0;kill,0.4;eat,0.4;drink,0.2;green,1;red,0;water,3;hunger,0;lust,0;gameMode,qlearning
 
-Actually the basic syntax is `#name1=value1&name2=value2`
+En réalité la syntaxe de base est `#name1=value1&name2=value2`
 
 But in our case we only specify one parameter named 'param' with, as a value, the cookie corresponding to the desired configuration, stored in the following format : 
 
