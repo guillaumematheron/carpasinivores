@@ -151,6 +151,12 @@ function updateGod(deltaTime) {
     else if (gameMode=='survival' && green.data.selected==false) {
       ia_green_update_auto(green.data);
     }
+    else if (gameMode=='qlearning' && green.data.selected==true) {
+      ia_green_update_user(green.data);
+    }
+    else if (gameMode=='qlearning' && green.data.selected==false) {
+      ia_green_update_auto(green.data);
+    }
     greenPeopleUpdateTime+=time()-timeStart;
 
     timeStart=time();
@@ -163,11 +169,13 @@ function updateGod(deltaTime) {
       //Collision with water -> drink it
       if (ret.nearestObject.type=='water') {
         if (ret.nearestObject.element.radius>0 && green.data.hunger-drinkFactor*deltaTime>0) green.data.hunger-=drinkFactor*deltaTime;
+        if (gameMode=='qlearning') green.data.forward(200*Math.random()/deltaTime); //DEBUG qLearning
         ret.nearestObject.changeRadius(-5*deltaTime);
         //If the water spot gets really small, delete it (to avoid having many very-small water spots on the scene, because they can't be detected by the eye
         if (ret.nearestObject.element.radius<3) {
           listOfWaterSpots.remove(ret.nearestObject.waterSpotsContainer);
           colorDots.remove(ret.nearestObject.element.colorDotsContainer);
+          green.data.contact=null;
           getMatrixCell(ret.nearestObject.element.x,ret.nearestObject.element.y).remove(ret.nearestObject.matrixContainer);
           ret.nearestObject.destroy();
         }
@@ -239,7 +247,7 @@ function updateGod(deltaTime) {
     //If the red is full, then it will make a baby
     if (red.data.getHunger()<0.03) {
       var red3=new Red();
-      red3.element.move(red.data.element.x,red.data.element.y);
+      red3.element.move(red.data.element.x+1,red.data.element.y+1);
       red.data.hunger+=0.6;
       red3.element.rotate(Math.random()*360);
       red3.hunger=0.6;

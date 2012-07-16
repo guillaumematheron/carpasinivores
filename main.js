@@ -57,15 +57,68 @@ function positionElement(element, x, y, w, h) {
   element.position(x+(w/2.0),y+(h/2.0));
 }
 
+function getUrlParameters() {
+  var ret={};
+  var loc=String(window.location);
+  var splitted=loc.split('#');
+  console.log(splitted);
+  if (splitted.length>1) {
+    var args=splitted[splitted.length-1].split('&');
+    for (i in args) {
+      console.log(args[i].split('=')[0]+' -> '+args[i].split('=')[1]);
+      ret[args[i].split('=')[0]]=args[i].split('=')[1];
+    }
+    return ret;
+  }
+  return null;
+}
+
+//Generates a cookie containing the paraters
+function getParamsCookie(disableForm) {
+  var cookie=''
+  var formNode=document.getElementById('paramsForm');
+  var fields=formNode.getElementsByTagName('input');
+  var fields2=formNode.getElementsByTagName('select');
+  for (i in fields) {
+    if (fields[i].id==undefined || fields[i].value=='' || fields[i].type!="text") continue;
+    cookie+=fields[i].id+','+fields[i].value+';';
+    if (disableForm===true) fields[i].disabled=true;
+  }
+  for (i in fields2) {
+    if (fields2[i].id==undefined) continue;
+    cookie+=fields2[i].id+','+fields2[i].value+';';
+    if (disableForm===true) fields2[i].disabled=true;
+  }
+  return (cookie);
+}
+
+function showLink() {
+  var link=String(window.location).split('#')[0]+'#params='+getParamsCookie();
+  window.alert('Use the following link to show your configuration to your friend/teacher : '+link);
+}
+
 //Entry point
 function loaded() {
+  var argParams='';
+  var args=getUrlParameters();
+  if (args!=null) {
+    if (args['params']!==undefined) argParams=args['params'];
+    window.location='#';
+  }
+  else {
+  }
+
   var code=getCookie('code');
   if (code!=null && code!='')
     document.getElementById('code').innerHTML=code;
   else
     resetCode();
+  
+  if (argParams=='')
+    var cookie=getCookie('params');
+  else
+    var cookie=argParams;  //We cheat a little since the arg params have the same syntax as the cookie
 
-  var cookie=getCookie('params');
   if (cookie!=null && cookie!='') {
     var fields=cookie.split(';');
     for (i in fields) {
@@ -74,18 +127,34 @@ function loaded() {
       document.getElementById(fields[i].split(',')[0]).value=fields[i].split(',')[1];
     }
   }
+
+  buildQTable();
 }
 
 function resetCode() {
-  var defaultCode="//var1 : sees water\n";
-  defaultCode+="//var2 : direction\n";
-  defaultCode+="//var3 : last hunger\n";
-  defaultCode+="if (me.age==0) {me.var1=false; me.var2=1; me.var3=me.getHunger();}\n";
-  defaultCode+="if (me.getColor().b>0 && !me.var1) {me.var1=true;}\n";
-  defaultCode+="if (me.getColor().b==0 && me.var1) {me.var1=false; me.var2*=-1;}\n";
-  defaultCode+="me.rotate(me.var2*30);\n";
-  defaultCode+="me.forward(20);\n";
-  defaultCode+="me.var3=me.getHunger();\n";
+  var defaultCode="//var1 : sees water";
+  defaultCode+="\n//var2 : direction";
+  defaultCode+="\n//var3 : last hunger";
+  defaultCode+="\n\nif (me.getSmell().r>0) me.forward(500);";
+  defaultCode+="\nif (me.getColor().r>0.6) {";
+  defaultCode+="\n  me.rotate(-4000);";
+  defaultCode+="\n}";
+  defaultCode+="\nelse {";
+  defaultCode+="\n  if (me.getSmell().b>0) {";
+  defaultCode+="\n    me.forward(20);";
+  defaultCode+="\n  }";
+  defaultCode+="\n  else {";
+  defaultCode+="\n    if (me.age==0) {me.var1=false; me.var2=1; me.var3=me.getHunger();}";
+  defaultCode+="\n    if (me.getColor().b>0 && !me.var1) {me.var1=true;}";
+  defaultCode+="\n    if (me.getColor().b==0 && me.var1) {";
+  defaultCode+="\n     if (me.getColor().g>0) {";
+  defaultCode+="\n     }";
+  defaultCode+="\n     else me.var1=false; me.var2*=-1;}";
+  defaultCode+="\n    me.rotate(me.var2*30);";
+  defaultCode+="\n    me.forward(20);";
+  defaultCode+="\n    me.var3=me.getHunger();";
+  defaultCode+="\n  }";
+  defaultCode+="\n}";
   document.getElementById('code').value=defaultCode;
 }
 
@@ -100,22 +169,11 @@ function startClicked() {
   initialGreen=document.getElementById('green').value;
   initialRed=document.getElementById('red').value;
   initialWater=document.getElementById('water').value;
+  hungerEvolution=document.getElementById('hunger').value;
+  lustEvolution=document.getElementById('lust').value;
   g_init(width,height,30,Array('green_selected.png','gray.png','red.png','water.png','green.png','eye.png'),init,updateWide);
 
-  var cookie='';
-  var formNode=document.getElementById('paramsForm');
-  var fields=formNode.getElementsByTagName('input');
-  var fields2=formNode.getElementsByTagName('select');
-  for (i in fields) {
-    if (fields[i].id==undefined) continue;
-    cookie+=fields[i].id+','+fields[i].value+';';
-    fields[i].disabled=true;
-  }
-  for (i in fields2) {
-    if (fields2[i].id==undefined) continue;
-    cookie+=fields2[i].id+','+fields2[i].value+';';
-    fields2[i].disabled=true;
-  }
+  var cookie=getParamsCookie(true);
   setCookie('params',cookie,3650);
   setCookie('code',document.getElementById('code').value,3650);
 
@@ -129,10 +187,18 @@ function startClicked() {
       matrix[i][j]=new LinkedList();
     }
   }
+
+  document.getElementById('paramsForm').style.display="none";
+  document.getElementById('controlPanel').style.display="";
+  if (gameMode=='qlearning')
+    document.getElementById('qtable').style.display='';
+  else
+    document.getElementById('debug2').style.display="";
 }
 
 function backtrace() {
   console.trace('Starting backtrace');
+  console.log('Post mortem debugger says : '+postMortemDebug);
 }
 
 //Called by graphics abstraction layer on every frame
@@ -282,6 +348,7 @@ function EyedElement(parent,w,h,image) {
     this.update();
     //We cannot just use this.x-x because this would cause trouble at the edges of the map
     //We need to do this after the update, so that the object is not out of the game area when its position is registered in the matrix
+    postMortemDebug='opc from ('+bakx+','+baky+') to ('+this.x+','+this.y+')';
     objectPositionChanged(this.parent,bakx,baky,this.x,this.y);
   }
   this.rotate=function(angle_deg) {
@@ -335,10 +402,10 @@ function Green() {
     if (this.cumulatedFatigueDistance<equilibrumSpeed*deltaTime) this.cumulatedFatigueDistance=0
     else this.cumulatedFatigueDistance-=equilibrumSpeed*deltaTime;
 
-    this.hunger+=0.02*deltaTime;
+    this.hunger+=hungerEvolution*deltaTime;
     this.pain-=0.01*deltaTime;
     if (this.pain<0) this.pain=0;
-    this.lust+=0.02*deltaTime;
+    this.lust+=lustEvolution*deltaTime;
     if (this.lust>1) this.lust=1;
     this.age++;
   }
@@ -504,29 +571,6 @@ function safeMove(mobile,x,y) {
 
   ret=getNearestObject(mobile.parent);
   if (ret.distance<0) {
-    if (ret.nearestObject.element.x==mobile.x && ret.nearestObject.element.y==mobile.y) return;
-    //console.log('Found an object with intersection '+ret.distance+'. Its position is ('+ret.nearestObject.element.x+';'+ret.nearestObject.element.y+'). Our position is ('+x+';'+y+')');
-    //The 'ghost' is colliding with something
-    /*var m=new Vector(); //m for motion (normalized)
-    m.x=x-oldPosition.x;
-    m.y=y-oldPosition.y;
-    m.normalize();
-    var a=new Vector(); //Corresponds to the vector AB that goes from the current object to the other object
-    a.x=ret.nearestObject.element.x-mobile.x;
-    a.y=ret.nearestObject.element.y-mobile.y;
-    var am=a.dot(m);
-    var am2=am*am;
-    var rt=mobile.radius+ret.nearestObject.element.radius;
-    var rt2=rt*rt;
-    var a2=a.dot(a);
-    var delta=4*am2+4*(rt2-a2);
-    var sqrdelta=Math.sqrt(delta);
-    var k=(-2*am+sqrdelta)/2;
-    //Test if k<0
-    m.multiply(-k);
-    mobile.x+=m.x;
-    mobile.y+=m.y;*/
-
     var a=new Vector(); //Corresponds to the vector AB that goes from the current object to the other object
     a.x=ret.nearestObject.element.x-mobile.x;
     a.y=ret.nearestObject.element.y-mobile.y;

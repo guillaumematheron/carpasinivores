@@ -19,4 +19,7 @@ var drinkFactor=0.3;
 var initialGreen=20;
 var initialRed=6;
 var initialWater=35;
+var hungerEvolution=0.02;
+var lustEvolution=0.02;
+
 var decompositionTime=5.0;

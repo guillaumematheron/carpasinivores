@@ -9,6 +9,7 @@
   <script type="text/javascript" src="enchant.js"></script>
   <script type="text/javascript" src="canvas.enchant.js"></script>
   <script type="text/javascript" src="linkedlist.js"></script>
+  <script type="text/javascript" src="qlearning.js"></script>
   <script type="text/javascript" src="graphics_abstract_enchantjs.js"></script>
   <script type="text/javascript" src="god.js"></script>
   <script type="text/javascript" src="ia.js"></script>
@@ -18,7 +19,7 @@
           margin: 0;
           padding: 0;
       }
-      .controlPanel {
+      #controlPanel {
         border: 1px solid black;
         width: 500px;
       }
@@ -38,7 +39,7 @@
 </td>
 <td>
 <!-- Log/control area -->
-<div class="controlPanel">
+<div id="controlPanel" style="display: none;">
   <p>Fatigue : <span id="fatigueSensor"></span></p>
   <p>Hunger : <span id="hungerSensor"></span></p>
   <p>Pain : <span id="painSensor"></span></p>
@@ -49,13 +50,25 @@
   <div id="smellSensorVisual" style="display: block; width: 50px; height: 30px;"></div></td></tr></table>
 </div>
 <table><tr><td>
-<textarea id="debug2" rows="15" cols="20"></textarea>
+
+<!-- CSV output -->
+<textarea id="debug2" rows="15" cols="20" style="display: none;"></textarea>
+
+<!-- Q Table -->
+<table border="1" id="qtable" style="display: none;">
+<tr><td></td><td>Forward</td><td>Left</td><td>Right</td></tr>
+<tr><td>Forward</td><td id="q00"></td><td id="q01"></td><td id="q02"></td></tr>
+<tr><td>Left</td><td id="q10"></td><td id="q11"></td><td id="q12"></td></tr>
+<tr><td>Right</td><td id="q20"></td><td id="q21"></td><td id="q22"></td></tr>
+</table>
+
 </td><td style="border : 1px solid black">
 <!-- Initial values form -->
 <form id="paramsForm" >
 <table>
 <tr><td><label for="gameMode">Game mode</label></td><td><select id="gameMode">
-<option value="species">Survival of the species</option><option value="survival">Survival of an individual</option></select></td></tr>
+<option value="species">Survival of the species</option><option value="survival">Survival of an individual</option>
+<option value="qlearning">Q-Learning</option></select></td></tr>
 <tr><td><label for="width">Width</label></td><td><input type="text" value="15" id="width" size="5" /></td></tr>
 <tr><td><label for="height">Height</label></td><td><input type="text" value="10" id="height" size="5" /></td></tr>
 <tr><td><label for="rain">Rain factor</label></td><td><input type="text" value="0.05" id="rain" size="5" /></td></tr>
@@ -65,10 +78,15 @@
 <tr><td><label for="green">Green population</label></td><td><input type="text" value="15" id="green" size="5" /></td></tr>
 <tr><td><label for="red">Red population</label></td><td><input type="text" value="6" id="red" size="5" /></td></tr>
 <tr><td><label for="water">Initial water</label></td><td><input type="text" value="5" id="water" size="5" /></td></tr>
+<tr><td><label for="hunger">Hunger evolution</label></td><td><input type="text" value="0.02" id="hunger" size="5" /></td></tr>
+<tr><td><label for="lust">Lust evolution</label></td><td><input type="text" value="0.02" id="lust" size="5" /></td></tr>
 </table>
-<input type="button" value="Reset to default settings" onclick="confirm('You\'ll lose all your settings !') && document.getElementById('paramsForm').reset();" id="resetParams" />
+<input type="button" value="Reset to default settings" onclick="confirm('You\'ll lose all your settings !') && document.getElementById('paramsForm').reset();" id="resetParams" /><br />
+<a onclick="showLink();" href="#">Link to these settings</a><br />
+<a href="#" onclick="window.location='#params=width,8;height,8;rain,0;kill,0.4;eat,0.4;drink,0.2;green,1;red,0;water,3;hunger,0;lust,0;gameMode,qlearning;'; loaded();">QLearning demo</a>
 </form>
 </td></table>
+
 </td></tr>
 <tr><td colspan="2">
 <!-- Status area -->
