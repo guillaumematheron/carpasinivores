@@ -10,4 +10,8 @@ Le jeu des carpasinivores est une simulation interactive du comportement d'une c
   4. [Comment utiliser l'interface](interface.md)
   5. [Exemples de simulations intéréssantes](applications.md)
 * Documentation technique
-  1. [Documentation technique sur le Q-Learning](qlearning.me)
+  1. [Q-Learning](qlearning.md)
+  2. [Passage de paramètres au simulateur](hashparams.md)
+  3. [Calcul des collision](collisions.md)
+  4. [Traçage de rayons](raycast.md)
+
