@@ -1,4 +1,4 @@
-Documentation de Carpasinivores
+Documentation des Carpasinivores
 ===============================
 
 Le jeu des carpasinivores est une simulation interactive du comportement d'une colonie de petits &ecirc;tres-verts, dans un univers bio-inspir&eacute;. Le but de ce jeu est de vous fiare d&eacute;couvrir des *petits grains de science*, comme par exemple vous initier &agrave; l'algorithmique, ou vous faire d&eacute;couvrir des &eacute;quations permettant de d&eacute;crire l'&eacute;volution de populations.
