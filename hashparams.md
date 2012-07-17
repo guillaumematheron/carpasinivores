@@ -11,7 +11,7 @@ Un exemple de lien est par exemple :
 
 En réalité la syntaxe de base est `#name1=value1&name2=value2`
 
-But in our case we only specify one parameter named 'param' with, as a value, the cookie corresponding to the desired configuration, stored in the following format : 
+Mais dans notre cas on spécifie uniquement un paramètre nommé 'param' avec comme valeur le cookie correspondant à la configuration désirée, stockée selon le format suivant :
 
     name1,value1;name2,value2;name3,value3
 

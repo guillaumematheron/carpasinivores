@@ -74,6 +74,6 @@ function LinkedList() {
       }
     }
     this.length--;
+    linkedlistelement.deleted=true;
   }
-  linkedlistelement.deleted=true;
 }

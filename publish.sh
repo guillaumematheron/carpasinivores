@@ -9,7 +9,7 @@ for file in `ls *.md`
 done
 
 echo Copying files onto server
-scp *.html carpasinivores@198.245.54.228:/var/www/carpasinivores/doc
+scp *.png *.html carpasinivores@198.245.54.228:/var/www/carpasinivores/doc
 
 for file in `ls *.html`
   do

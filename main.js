@@ -74,26 +74,28 @@ function getUrlParameters() {
 }
 
 //Generates a cookie containing the paraters
-function getParamsCookie(disableForm) {
+//  disableForm -> disable the params form
+//  hashParametersMode -> use '=' instead of ','
+function getParamsCookie(disableForm,hashParametersMode) {
   var cookie=''
   var formNode=document.getElementById('paramsForm');
   var fields=formNode.getElementsByTagName('input');
   var fields2=formNode.getElementsByTagName('select');
   for (i in fields) {
     if (fields[i].id==undefined || fields[i].value=='' || fields[i].type!="text") continue;
-    cookie+=fields[i].id+','+fields[i].value+';';
+    cookie+=fields[i].id+((hashParametersMode===true)?'=':',')+fields[i].value+'&';
     if (disableForm===true) fields[i].disabled=true;
   }
   for (i in fields2) {
     if (fields2[i].id==undefined) continue;
-    cookie+=fields2[i].id+','+fields2[i].value+';';
+    cookie+=fields2[i].id+((hashParametersMode===true)?'=':',')+fields2[i].value+'&';
     if (disableForm===true) fields2[i].disabled=true;
   }
   return (cookie);
 }
 
 function showLink() {
-  var link=String(window.location).split('#')[0]+'#params='+getParamsCookie();
+  var link=String(window.location).split('#')[0]+'#'+getParamsCookie(false,true);
   window.alert('Use the following link to show your configuration to your friend/teacher : '+link);
 }
 
@@ -101,8 +103,8 @@ function showLink() {
 function loaded() {
   var argParams='';
   var args=getUrlParameters();
-  if (args!=null) {
-    if (args['params']!==undefined) argParams=args['params'];
+  if (args!=null) { //TODO
+    argParams=window.location.hash.substr(1);
     window.location='#';
   }
   else {
@@ -117,10 +119,12 @@ function loaded() {
   if (argParams=='')
     var cookie=getCookie('params');
   else
-    var cookie=argParams;  //We cheat a little since the arg params have the same syntax as the cookie
+    var cookie=argParams.replace(/=/g,',');  //We cheat a little since the arg params have the same syntax as the cookie
+
+  console.log(cookie);
 
   if (cookie!=null && cookie!='') {
-    var fields=cookie.split(';');
+    var fields=cookie.split('&');
     for (i in fields) {
       if (fields[i]=='') continue;
       if (fields[i].split(',')[0]==null || fields[i].split(',')[0]=='') continue;
@@ -173,7 +177,8 @@ function startClicked() {
   lustEvolution=document.getElementById('lust').value;
   g_init(width,height,30,Array('green_selected.png','gray.png','red.png','water.png','green.png','eye.png'),init,updateWide);
 
-  var cookie=getParamsCookie(true);
+  var cookie=getParamsCookie(true,false);
+  console.log('setting cookie '+cookie);
   setCookie('params',cookie,3650);
   setCookie('code',document.getElementById('code').value,3650);
 

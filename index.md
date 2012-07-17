@@ -3,8 +3,10 @@ Documentation des Carpasinivores
 
 Le jeu des carpasinivores est une simulation interactive du comportement d'une colonie de petits êtres-verts, dans un univers bio-inspiré. Le but de ce jeu est de vous fiare découvrir des *petits grains de science*, comme par exemple vous initier à l'algorithmique, ou vous faire découvrir des équations permettant de décrire l'évolution de populations.
 
-* Documentation élève
-  1. [Description de l'univers du jeu](univers.md)
+* Lancer le simulateur
+  1. [Mode survie de l'espèce](../simulator.html#gameMode=species)
+  2. [Mode survie d'un individu](../simulator.html#gameMode=survival)
+  :
   2. [Paramètres de la simulation](parametres.md)
   3. [API : Documentation du langage de programmation](api.md)
   4. [Comment utiliser l'interface](interface.md)
