@@ -6,6 +6,8 @@ var width=40*15;
 var height=40*10;
 var stopped=false;  //Not a constant, but still a global
 var gDeltaTime;  //Not a constant, but still a global
+var score=0;
+var qEau=0;
 var gNarrowPhases;
 var gNarrowPhases2;
 var gNarrowPhases_;

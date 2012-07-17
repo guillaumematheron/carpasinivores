@@ -215,6 +215,13 @@ function updateWide() {
   //Limit the 'visible' framerate to 10 so that the objects won't 'jump' too quickly when the framerate is very low
   if (deltaTime>0.1) deltaTime=0.1;
   frame++;
+
+  if (frame==2) score=0;
+  if (gameMode=='survival') score+=deltaTime;
+  else if (gameMode=='species') score+=deltaTime;
+  else if (gameMode=='qlearning') score=(qEau*1000)/(frame+1);
+
+  document.getElementById('score').innerHTML=Math.round(score*100)/100;
   //Update the game model
   updateGod(deltaTime);
 }

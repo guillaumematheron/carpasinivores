@@ -107,6 +107,7 @@ function iterate(obj) {
 
   //Compute payoff
   var payoff=(obj.getSmell().b>0)?1:0;
+  qEau+=payoff;
 
   //Compute maximum Q for the next action
   var maxQ=0;

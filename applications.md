@@ -9,8 +9,9 @@ Quand on laisse une population d'êtres-verts évoluer sans prédateurs, avec ju
 
 L'équation d'évolution d'un système avec des êtres-verts qui se reproduisent et de l'eau s'écrit : 
 
-dw/dt=alpha-beta*g
-dg/dt=-g*(deta-gamma*w)
+    dw/dt=alpha-beta*g
+
+    dg/dt=-g*(deta-gamma*w)
 
 Où : 
 
