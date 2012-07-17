@@ -29,7 +29,7 @@ function g_init(w,h,fps,resourceFiles,onLoad,onFrame) {
     globGame.rootScene.addChild(ball);
 
     //DEBUG draw cells
-    var lineH = new Surface(w,1);
+   /* var lineH = new Surface(w,1);
     lineH.context.beginPath();
     lineH.context.strokeRect(0,0,w,1);
     lineH.context.fill();
@@ -48,7 +48,7 @@ function g_init(w,h,fps,resourceFiles,onLoad,onFrame) {
       sprite.image=lineV;
       sprite.x=i;
       globGame.rootScene.addChild(sprite);
-    }
+    }*/
 
     onLoad();
   }

@@ -128,11 +128,21 @@ function loaded() {
     for (i in fields) {
       if (fields[i]=='') continue;
       if (fields[i].split(',')[0]==null || fields[i].split(',')[0]=='') continue;
-      document.getElementById(fields[i].split(',')[0]).value=fields[i].split(',')[1];
+      var el=document.getElementById(fields[i].split(',')[0]);
+      if (el!=null)
+        el.value=fields[i].split(',')[1];
     }
   }
 
   buildQTable();
+
+  if (argParams!='' && argParams.search('autoStart')!=-1) startClicked();
+
+  upMode=function() {document.getElementById('code').disabled=(this.value=='qlearning');
+    document.getElementById('qLHelp').style.display=(this.value==='qlearning')?'':'none';
+  };
+  document.getElementById('gameMode').onchange=upMode;
+  upMode();
 }
 
 function resetCode() {
@@ -194,11 +204,19 @@ function startClicked() {
   }
 
   document.getElementById('paramsForm').style.display="none";
+  document.getElementById('paramsForm_').style.display="none";
   document.getElementById('controlPanel').style.display="";
-  if (gameMode=='qlearning')
+  document.getElementById('controlPanel_').style.display="";
+  if (gameMode=='qlearning') {
     document.getElementById('qtable').style.display='';
-  else
-    document.getElementById('debug2').style.display="";
+    document.getElementById('qtable_').style.display='';
+  }
+  else {
+    if (gameMode=='csv') {
+      document.getElementById('debug2').style.display="";
+      document.getElementById('debug2_').style.display="";
+    }
+  }
 }
 
 function backtrace() {
@@ -218,10 +236,11 @@ function updateWide() {
 
   if (frame==2) score=0;
   if (gameMode=='survival') score+=deltaTime;
+  else if (gameMode=='csv') score+=deltaTime;
   else if (gameMode=='species') score+=deltaTime;
   else if (gameMode=='qlearning') score=(qEau*1000)/(frame+1);
 
-  document.getElementById('score').innerHTML=Math.round(score*100)/100;
+  document.getElementById('score').innerHTML='Score : '+Math.round(score*100)/100;
   //Update the game model
   updateGod(deltaTime);
 }

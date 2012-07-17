@@ -29,6 +29,15 @@
   </style>
 </head>
 <body onload="loaded();">
+
+<!-- Header -->
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<!-- Buttons -->
+<input type="button" name="start" value="start" id="start" onclick="startClicked();" />
+<input type="button" name="stop" value="stop" id="stop" onclick="stop();" style="display: none; margin-right: 50px;" />
+<input type="button" name="retry" value="retry" id="retry" onclick="location.reload(true);" style="display:none" />
+
 <table>
 <tr><td>
 <!-- Play/code area -->
@@ -41,6 +50,7 @@
 <td>
 <!-- Log/control area -->
 <div id="controlPanel" style="display: none;">
+  <h3 id="controlPanel_">Control panel</h3>
   <p>Fatigue : <span id="fatigueSensor"></span></p>
   <p>Hunger : <span id="hungerSensor"></span></p>
   <p>Pain : <span id="painSensor"></span></p>
@@ -53,9 +63,11 @@
 <table><tr><td>
 
 <!-- CSV output -->
+<h3 id="debug2_" style="display: none;">CSV Output</h3>
 <textarea id="debug2" rows="15" cols="20" style="display: none;"></textarea>
 
 <!-- Q Table -->
+<h3 id="qtable_" style="display: none">Q-Table</h3>
 <table border="1" id="qtable" style="display: none;">
 <tr><td></td><td>Forward</td><td>Left</td><td>Right</td></tr>
 <tr><td>Forward</td><td id="q00"></td><td id="q01"></td><td id="q02"></td></tr>
@@ -65,11 +77,13 @@
 
 </td><td style="border : 1px solid black">
 <!-- Initial values form -->
-<form id="paramsForm" >
+<h3 id="paramsForm_">Simulation parameters</h3>
+<form id="paramsForm">
 <table>
 <tr><td><label for="gameMode">Game mode</label></td><td><select id="gameMode">
 <option value="species">Survival of the species</option><option value="survival">Survival of an individual</option>
-<option value="qlearning">Q-Learning</option></select></td></tr>
+<option value="qlearning">Q-Learning</option><option value="csv">CSV Logging</option></select></td></tr>
+<tr><td></td><td><a href="qlearning.html" id="qLHelp" style="display:none">Aide sur le Q-Learning</a></td></tr>
 <tr><td><label for="width">Width</label></td><td><input type="text" value="15" id="width" size="5" /></td></tr>
 <tr><td><label for="height">Height</label></td><td><input type="text" value="10" id="height" size="5" /></td></tr>
 <tr><td><label for="rain">Rain factor</label></td><td><input type="text" value="0.05" id="rain" size="5" /></td></tr>
@@ -83,17 +97,13 @@
 <tr><td><label for="lust">Lust evolution</label></td><td><input type="text" value="0.02" id="lust" size="5" /></td></tr>
 </table>
 <input type="button" value="Reset to default settings" onclick="confirm('You\'ll lose all your settings !') && document.getElementById('paramsForm').reset();" id="resetParams" /><br />
-<a onclick="showLink();" href="#">Link to these settings</a><br />
-<a href="#" onclick="window.location='#width=8&height=8&rain=0&kill=0.4&eat=0.4&drink=0.2&green=1&red=0&water=3&hunger=0&lust=0&gameMode=qlearning&'; loaded();">QLearning demo</a>
+<a onclick="showLink();" href="#">Share this configuration</a><br />
 </form>
 </td></table>
 
 </td></tr>
 <tr><td colspan="2">
 <!-- Status area -->
-<input type="button" name="start" value="start" id="start" onclick="startClicked();" />
-<input type="button" name="stop" value="stop" id="stop" onclick="stop();" style="display: none; margin-right: 50px;" />
-<input type="button" name="retry" value="retry" id="retry" onclick="location.reload(true);" style="display:none" />
 <span id="info" style="max-width: 500px;"></span>
 </td></tr></table>
 

@@ -4,9 +4,9 @@ Bienvenue chez les Carpasinivores
 Le jeu des carpasinivores est une simulation interactive du comportement d'une colonie de petits êtres-verts, dans un univers bio-inspiré. Le but de ce jeu est de faire découvrir des *petits grains de science*, comme par exemple s'initier à l'algorithmique, ou faire découvrir quels modèles permettent de décrire l'évolution de populations ou de formaliser l'apprentissage d'un être vivavnt.
 
 * Lancer le simulateur
-  1. [Mode survie de l'espèce](simulator.html#gameMode=species)
-  2. [Mode survie d'un individu](simulator.html#gameMode=survival)
-  3. [Mode de simulation de l'apprentissage par récompense](simulator.html#gameMode=qlearning&width=8&height=8&rain=0&kill=0.4&eat=0.4&drink=0.2&green=1&red=0&water=3&hunger=0&lust=0)
+  1. [Mode survie de l'espèce](simulator.html#gameMode=species&autoStart=true)
+  2. [Mode survie d'un individu](simulator.html#gameMode=survival&autoStart=true)
+  3. [Mode de simulation de l'apprentissage par récompense](simulator.html#gameMode=qlearning&width=8&height=8&rain=0&kill=0.4&eat=0.4&drink=0.2&green=1&red=0&water=3&hunger=0&lust=0&autoStart=true)
 
 * Documentation élève
   1. [Présentation de l'univers du simulateur](univers.md)

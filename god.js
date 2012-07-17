@@ -142,7 +142,7 @@ function updateGod(deltaTime) {
     timeStart=time();
     //TODO send signal to red spot if hit
     green.data.update(deltaTime);
-    if (gameMode=='species') {
+    if (gameMode=='species' || gameMode=='csv') {
       if (ia_green_update_user(green.data)==false) return;
     }
     else if (gameMode=='survival' && green.data.selected==true) {
