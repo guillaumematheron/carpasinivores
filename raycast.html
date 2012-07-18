@@ -1,5 +1,34 @@
-<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+<p><a href="index.html"><img id="logo" src="logo.png" alt="Logo" title="" /></a></p>
+<script>
 
+
+function getMobile() {
+  isMobile={
+    Android: function() {
+      return navigator.userAgent.match(/Android/i) ? true : false;
+    },
+    BlackBerry: function() {
+      return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+    },
+    iOS: function() {
+      return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+    },
+    Windows: function() {
+      return navigator.userAgent.match(/IEMobile/i) ? true : false;
+    },
+    any: function() {
+      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+    }
+  };
+  return (isMobile);
+}
+
+document.body.onload=function() {
+  if (getMobile().any()==true) {
+    document.getElementById('logo').style.width='200px';
+  }
+};
+</script>
 <h1>Tra&ccedil;age de rayons</h1>
 
 <p>Le tra&ccedil;ade de rayon ou <em>raycast</em> permet de d&eacute;terminer la couleur de l'objet en face de l'oeil des &ecirc;tres-verts.</p>
