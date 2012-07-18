@@ -7,15 +7,5 @@ Les paramètres sont spécifiées après un hashmark (#) à la fin de l'URL, dan
 
 Un exemple de lien est par exemple :
 
-    file:///D:/carpasinivores/#params=width,8;height,8;rain,0;kill,0.4;eat,0.4;drink,0.2;green,1;red,0;water,3;hunger,0;lust,0;gameMode,qlearning
-
-En réalité la syntaxe de base est `#name1=value1&name2=value2`
-
-Mais dans notre cas on spécifie uniquement un paramètre nommé 'param' avec comme valeur le cookie correspondant à la configuration désirée, stockée selon le format suivant :
-
-    name1,value1;name2,value2;name3,value3
-
-Nous n'utilisont pas directement `#width=8&height=8&rain=0` car nos paramètres sont lus par un système qui modifie automatiquement les champs du panneau 'params'.
-Il est donc important de séparer les 'paramètres de la simulation' comme width, height et gameMode des 'paramètres de l'application' qui ne sont pas implémentés mais
-ne correspondent pas à des valeurs pas défaut de champs du panneau 'params'.
+    file:///D:/carpasinivores/index.html#nom1=valeur1&nom2=valeur2
 
