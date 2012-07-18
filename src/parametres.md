@@ -29,6 +29,7 @@ Paramètres de la simulation
 - *Rain factor*
   
   Quantité de pluie. Entrez 0 pour ne pas avoir de pluie. La valeur par défaut est 0.05
+  Cette valeur peut aussi être négative, auquel cas des flaques d'eau disparaissent aléatoirement. Les deux dernières flaques ne seront jamais supprimmées.
 
 - *Kill factor*
 

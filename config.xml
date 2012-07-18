@@ -16,6 +16,7 @@
 
 	<icon src="icon.png" gap:role="default" />
 
+        <preference name="permissions" value="none"/>
 	<feature name="http://api.phonegap.com/1.0/network"/>
 
 	<preference name="orientation" value="portrait" />

@@ -273,9 +273,22 @@ function updateGod(deltaTime) {
   //console.log('greenPeopleUpdateTime='+Math.round(greenPeopleUpdateTime*1000)+' greepPeopleCollTime='+Math.round(greenPeopleCollTime*1000)+' redPeopleUpdateTime='+Math.round(redPeopleUpdateTime*1000)+' updateGodTime='+Math.round((time()-updateGodStart)*1000));
 
   /* Rain */
-  if (Math.random()<rainFactor) {
-    var w=new Water();
-    w.element.move(Math.random()*width,Math.random()*height);
+  if (rainFactor>=0) {
+    if (Math.random()<rainFactor) {
+      var w=new Water();
+      w.element.move(Math.random()*width,Math.random()*height);
+    }
+  }
+  else {
+    if (Math.random()<-rainFactor) {
+      if (listOfWaterSpots.length>2) {
+        var el=listOfWaterSpots.first.data;
+        listOfWaterSpots.remove(el.waterSpotsContainer);
+        colorDots.remove(el.element.colorDotsContainer);
+        getMatrixCell(el.element.x,el.element.y).remove(el.matrixContainer);
+        el.destroy();
+      }
+    }
   }
 
   if (frame%10==0) {
