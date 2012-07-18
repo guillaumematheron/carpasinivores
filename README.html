@@ -1,0 +1,69 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>carpasinivores</h1>
+
+<p>Grain 3.0 : les carpasinivores</p>
+
+<h1>API</h1>
+
+<p>The current object is designated by the variable 'me'. You have five variables to use as the element's 'memory' : you can assign whatever you want to these variables (they are initialized at zero).</p>
+
+<p>You can use the following functions on the variable 'me' to get status information : 
+- me.getColor() -> Returns the color that the object sees. Use getColor().r, getColor().g, getColor().b to get individual color components (between 0 and 1)
+- me.getHunger()
+- me.getFatigue()
+- me.getLust()
+- me.getPain()
+- me.getSmell() -> Returns a color, see me.getColor() for information about how to use it</p>
+
+<p>You can use the following functions on the variable 'me' to act on the element : 
+- me.forward(distance) -> Goes forward of the specified distance (in pixels/second)
+- me.rotate(angle) -> Rotates to the right with the following angle (in degrees/seconds)</p>
+
+<p>Note : the sensors are not updated during the frame, so you cannot perform a full rotation in just one frame and sample the color every 10° like this for instance : </p>
+
+<pre><code>for (var i=0; i&lt;360; i+=10) {
+    me.rotate(10);
+    //This won't work : me.getColor() is not updated during the frame
+    if (me.getColor().b&gt;0) {
+        //...
+    }
+}
+</code></pre>
+
+<h1>Modes of operation</h1>
+
+<p>You have currently three modes of operation : 
+ - Survival of the species : You write a program that rules the behaviour of all the green elements. You aim is to ensure the species will survive.
+ - Survival of an individual : You write a program for one of the green elements (the one that has a black border), and all the other green elements are 'bots'.
+   Your goal is to make sure your green element survives as long as possible.
+ - Q-Learning : In this mode, any code you enter in the program area is ignored. All the green elements are normal bots, but the one that has a black border has a
+   learning algorithm that allows him to evolve according to what he experiences.
+   The basic idea behing Q-learning is that the agent has a <em>state</em> which, in our case is the association of the level of blue the element sees (0-7) and the last
+   action the agent took. The agent has three <em>actions</em> that are possible in each iteration : it can go forward, rotate left or rotate right. This means that there are
+   8<em>3=24 possible states. If we had to program manually an optimal behaviour for this situation, we would have to select the best action for each state. For instance,
+   if we do not see any blue (color=0) and the last action was rotate left, then the optimal action is to rotate right.
+   To know what is the best action for each state, the element uses a Q-Table to store the *expected payoffs</em> for each action, and each state. For instance, if we are in state
+   S, the element will query the Q-Table for the three state-action couples (S;forward), (S;left) and (S;right). It will then select the one that has the <em>highest expected
+   payoff</em>.
+   Of course the content of the Q-Table is essential to the learning process : the idea behind Q-Learning is to <em>fill in the table while the element is experimenting</em> : at the
+   beginning the table is empty, so the element always makes random choices, but when the element gets a payoff (touching water in our case) after performing action A from state S, 
+   the cell (S;A) of the Q-Table is incremented of one. Thus, the next time the element is in state S, it will be more likely to pick action A.
+   However, how is the agent able to plan its actions over several iterations ? Indeed, some actions may be good, but not generate any immediate payoff. In our case, only the action
+   that immediately preceeds touching water has a payoff. This is why even when no immediate payoff is received after performing (S;A), a value Q-Table is added to the corresponding
+   cell. <em>This value depends on the maximum expected payoff the agent can get from the new state S' in which it arrived.</em> For instance, the agent is able to learn that any move that
+   tends to bring him closer to the water (brighter color) is a good move.</p>
+
+<h1>Panels and HUDs</h1>
+
+<p>The page contains several panels that are used in the different game modes.
+ - The <em>code</em> panel lets you type your own program in 'survival of the species' and 'survival of an individual' modes. See the <em>API</em> for instructions on how to program your element(s).
+ - The <em>settings</em> panel lets you enter custom settings for your simulation. Please be careful when changing these settings, you could crash the simulator or even overload your computer
+   if you get exponential growths.
+   If you enter settings that show an interesting result, you can share your simulation with friends and/or teachers by pressing 'Link to these settings'. If you entered your own code
+   in the <em>code</em> panel, you will have to include this code as well.
+ - The <em>control</em> panel lets you observe the inputs of one of the elements (the one that has a black border).
+ - The <em>CSV log</em> panel contains a log of the game states, each ten iterations. After you stop the game, you can copy-paste this data to a csv file and open it with your favourite
+   spreadsheet software to plot the evolution of the number of green and red elements. Note that this view does not appear in 'Q-Learning' mode because you typically observe very few
+   elements in this mode.
+ - The <em>Q-Table</em> panel shows the current content of the Q-Table. Each row corresponds to a state (there are 24 states), and each column to an action (3 actions).</p>

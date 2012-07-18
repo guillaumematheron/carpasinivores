@@ -1,0 +1,65 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>Param&egrave;tres de la simulation</h1>
+
+<ul>
+<li><p><em>Game mode</em> (mode de jeu)</p>
+
+<ul>
+<li>Survival of the species (survie de l'esp&egrave;ce)</li>
+</ul>
+
+<p>Dans ce mode vous &eacute;crivez un programme qui sera utilis&eacute; par tous les &ecirc;tres-verts. Votre objectif est de permettre la survie de votre esp&egrave;ce.</p>
+
+<ul>
+<li>Survival of an individual (survie d'un individu)</li>
+</ul>
+
+<p>Dans ce mode vous &eacute;crivez un programme qui sera utilis&eacute; par un seul &ecirc;tre-vert (celui avec une bordure noire). Les autres &ecirc;tres-verts, s'il y en a, sont
+des 'b&ecirc;tes' avec un comportement pr&eacute;-programm&eacute;. Votre objectif est que votre &ecirc;tre-vert survive aussi longtemps que possible.</p>
+
+<ul>
+<li><a href="qlearning.html">Q-Learning</a> (apprentissage 'Q')</li>
+</ul>
+
+<p>Dans ce mode vous n'entrez pas de code dans le fen&ecirc;tre de code (celui-ci sera ignor&eacute;). Un individu (celui avec une bordure noire) est dot&eacute; d'un syst&egrave;me
+d'apprentissage bas&eacute; sur l'exp&eacute;rience. Au fur et &agrave; mesure de sa progression, cet individu devient capable de progresser de mani&egrave;re de plus en plus
+'intelligente'. Ce processur peut prendre plusieurs dizaines de minutes et d&eacute;montre le principe d'apprentissage par renforcement.</p></li>
+<li><p><em>Width</em> (largeur)</p>
+
+<p>Largeur de l'aire de simulation. Il est d&eacute;conseill&eacute; de param&eacute;trer des aires de simulations trop petites, car les algorithmes du simulateur sont
+moins pr&eacute;cis quand la densit&eacute; d'&eacute;l&eacute;ments sur la sc&egrave;ne est trop grande. Dans tous les cas, ne pas aller en-de&ccedil;&agrave; de 5x5. La taille par d&eacute;faut est 15x10</p></li>
+<li><p><em>Height</em> (hauteur)</p>
+
+<p>Voir Width</p></li>
+<li><p><em>Rain factor</em></p>
+
+<p>Quantit&eacute; de pluie. Entrez 0 pour ne pas avoir de pluie. La valeur par d&eacute;faut est 0.05</p></li>
+<li><p><em>Kill factor</em></p>
+
+<p>Vitesse &agrave; laquelle les &ecirc;tres-verts meurent au contact des &ecirc;tres-rouges. Entrez 0 pour que les &ecirc;tres-verts soient immunis&eacute;s contre les &ecirc;tres-rouges.
+Ce param&egrave;tre n'influence pas la vitesse &agrave; laquelle les &ecirc;tres-rouges se nourissent au contact des &ecirc;tres-verts. La valeur par d&eacute;faut est 0.4</p></li>
+<li><p><em>Eat factor</em></p>
+
+<p>Vitesse &agrave; laquelle les &ecirc;tres-rouges se nourissent au contact des &ecirc;tres-verts. Ce param&egrave;tre n'influence pas la vitesse &agrave; laquelles les &ecirc;tres-verts
+meurent au contact des &ecirc;tres-rouges. La valeur pas d&eacute;faut est 0.4</p></li>
+<li><p><em>Drink factor</em></p>
+
+<p>Vitesse &agrave; laquelle les &ecirc;tres-verts boivent au contact de l'eau. Ce param&egrave;tre n'influence pas la vitesse &agrave; laquelle la taille des flaques d'eau
+diminuent au contact des &ecirc;tres-verts.</p></li>
+<li><p><em>Green population</em></p>
+
+<p>Quantit&eacute; initiale d'&ecirc;tres-verts</p></li>
+<li><p><em>Red population</em></p>
+
+<p>Quantit&eacute; initiale d'&ecirc;tres-rouges</p></li>
+<li><p><em>Initial water</em></p>
+
+<p>Nombre initial de points d'eau</p></li>
+<li><p><em>Hunger evolution</em></p>
+
+<p>Vitesse &agrave; laquelle la faim des &ecirc;tre-verts augmente lorsqu'ils ne sont pas au contact des flaques d'eau. Mettre &agrave; 0 pour que les &ecirc;tres-verts soient immunis&eacute;s contre la faim</p></li>
+<li><p><em>Lust evolution</em></p>
+
+<p><p>Vitesse &agrave; laquelle la b&eacute;b&eacute;mania des &ecirc;tre-verts augmente. Mettre &agrave; 0 pour d&eacute;sactiver la procr&eacute;ation</p></li>
+</ul></p>

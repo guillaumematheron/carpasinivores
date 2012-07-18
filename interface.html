@@ -1,0 +1,20 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>Utilisation de l'interface</h1>
+
+<p>Le simulateur comporte plusieurs panneaux qui sont utilis&eacute;s dans les diff&eacute;rents modes de jeu.
+  - Le panneau de code vous permet d'entrer votre propre programme dans les modes 'survival of the species' et 'survival of an individual'. Voir l'<a href="api.html">API</a> pour
+    plus d'informations sur comment programmet les &ecirc;tres-verts.
+    Si vous voulez sauvegarder votre programme, vous devez le copier-coller dans un document sur votre ordinateur.</p>
+
+<ul>
+<li><p>Le panneau de param&egrave;tres vous permet d'entrer des param&egrave;tres personnalis&eacute;s pour votre simulation. Soyez prudents quand vous changez ces param&egrave;tres, vous pourriez
+planter le simulateur ou m&ecirc;me surcharger votre ordinateur si vous obtenez des coissances exponentielles de population. Si vous entrez des param&egrave;tres qui
+produisent des r&eacute;sultats int&eacute;r&eacute;ssants, vous pouvez partager votre simulation avec vos amis et/ou professeurs en cliquant sur 'Link to these settings' (cr&eacute;er un
+lien vers ces param&egrave;tres). Si vous avez entr&eacute; votre propre code dans l'&eacute;diteur, vous devrez joindre ce code aussi.</p></li>
+<li><p>Le panneau de contr&ocirc;le vous permet d'observer les entr&eacute;es envoy&eacute;es &agrave; un des &ecirc;tres-verts (celui avec une bordure noire)</p></li>
+<li><p>Le log CSV contient un enregistrement des &eacute;tats du jeu, toutes les dix it&eacute;rations. Apr&egrave;s que vous arr&ecirc;tiez la simulation (bouton <code>stop</code>), vous pouvez copier-coller
+ces donn&eacute;es dans un fichier CSV et l'ouvrir avec votre tableur pr&eacute;f&eacute;r&eacute; pour tracer les courbes de l'&eacute;volution du nombre d'&ecirc;tres-verts et d'&ecirc;tres-rouges.</p></li>
+<li><p>La Q-Table montre le contenu actuel de la Q-Table. Chaque ligne repr&eacute;sente un &eacute;tat (il y a 24 &eacute;tats), et chaque colonne repr&eacute;sente une action possible (il y a 3 actions).
+Lisez la documentation du <a href="qlearning.html">Q-Learning</a> pour plus d'informations sur le fonctionnement interne de l'apprentissage Q-Learning.</p></li>
+</ul>

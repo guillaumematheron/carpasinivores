@@ -1,0 +1,132 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>Algorithme de choix de l'action dans un processur d'apprentissage Q-Learning</h1>
+
+<p>Le but de l'algorithme est de choisir l'action optimale dans une Q-Table sachant l'&eacute;tat actuel S.</p>
+
+<p>Supposons que les trois actions possibles soient not&eacute;es A1, A2, A3.</p>
+
+<p>On pourrait prendre la valeur maximale parmi q[S][A1], q[S][A2], q[S][A3] mais l'&ecirc;tre-vert risquerait de se bloquer en ne faisant qu'une
+seule action, emp&ecirc;chant le renforcement des autres comportements.</p>
+
+<h2>Description formelle</h2>
+
+<p>L'id&eacute;e de cet algorithme est que Pr{A}/Pr{A'}=q[S][A]/q[S][A'] pour toues les actions A et A'.</p>
+
+<p>Ainsi, la probabilit&eacute; de s&eacute;lectionner une action A est proportionnelle &agrave; sa valeur.</p>
+
+<p>Cela revient &agrave; normaliser les q[S][A] sur A, c'est-&agrave;-dire si on divise Q[S][A] pour tout A par un m&ecirc;me nombre d tel que la somme sur A des Q[S][A] vaille sum_A(Q[S][A])=1.</p>
+
+<h2>Processus de normalisation</h2>
+
+<p>L'algorithme est en r&eacute;alit&eacute; impl&eacute;ment&eacute; de fa&ccedil;on &agrave; ce que la normalisation des Q[S][A] sur A ne soit pas n&eacute;cessaire, mais il est indispensable de comprendre
+ce processus.</p>
+
+<p>Supposons que :</p>
+
+<ul>
+<li><p>Q[S][A1]=3</p></li>
+<li><p>Q[S][A2]=5</p></li>
+<li><p>Q[S][A3]=1</p></li>
+</ul>
+
+<p>On cherche le r&eacute;el d tel que Q[S][A1]/d+Q[S][A2]/d+Q[s][A3]/d=1.</p>
+
+<p>On a donc d=Q[S][A1]+Q[S][A2]+Q[S][A3]=sum_A(Q[S][A]).</p>
+
+<p>Ainsi dans notre exemple on a d=9 donc apr&egrave;s normalisation,</p>
+
+<ul>
+<li><p>Q[S][A1]=3/9=1/3</p></li>
+<li><p>Q[S][A2]=5/9</p></li>
+<li><p>Q[S][A3]=1/9</p></li>
+</ul>
+
+<h2>Choix de l'action</h2>
+
+<p>Toujours avec notre exemple, on cherche &agrave; choisir une action A telle que Pr{A1}=1/3, Pr{A2}=5/9 et Pr{A3}=1/9.</p>
+
+<p>On peut choisir un nombre al&eacute;atoire &agrave; distribution uniforme sur ]0;1[ et s'il est entre 0 et 1/3 on choisir l'action A1, s'il est entre 1/3 et 1/3+5/9 on choisit A2,
+sinon il est entre 1/3+5/9 et 1/3+5/9+1/9 et on choisit A3.</p>
+
+<p>L'algorithme pour faire cela est le suivant :</p>
+
+<pre><code>Soit 'runningSum'=0
+Soit 'nombre' un entier al&amp;eacute;atoire &amp;agrave; distribution uniforme sur ]0;1[
+R&amp;eacute;p&amp;eacute;ter pour toutes les actions possibles A
+  Ajouter Pr{A} &amp;agrave; runningSum
+  Si runningSum&gt;nombre Alors
+    S&amp;eacute;lectionner l'action A
+    Sortir de la boucle
+  FinSi
+FinR&amp;eacute;p&amp;eacute;ter
+</code></pre>
+
+<h2>En pratique</h2>
+
+<p>Plut&ocirc;t que de normaliser le tableau Q, nous avons pr&eacute;f&eacute;r&eacute; utiliser le m&ecirc;me algorithme, mais en s&eacute;lectionnant un nombre al&eacute;atoire &agrave; distribution uniforme entre 0 et sum_A(q[S][A]).</p>
+
+<p>Ainsi, dans notre exemple, on garde le tableau suivant :</p>
+
+<ul>
+<li><p>Q[S][A1]=3</p></li>
+<li><p>Q[S][A2]=5</p></li>
+<li><p>Q[S][A3]=1</p></li>
+</ul>
+
+<p>mais on choisit un nombre al&eacute;atoire entre 0 et 9. S'il est entre 0 et 3 on choisit A1, entre 3 et 8 on choisit A2, et entre 8 et 9 on choisir A3.</p>
+
+<p>L'algorithme devient (en javascript) : </p>
+
+<pre><code>function pickAction(currentState) {
+  var sum=0;
+  for (var i=0; i&lt;3; i++)
+    sum+=q[currentState.vision][currentState.lastAction][i];
+  var r=Math.random()*sum;
+  var runningSum=0, a=0;
+  for (var n=0; n&lt;3; n++) {
+    runningSum+=q[currentState.vision][currentState.lastAction][n];
+    if (r&lt;runningSum) {
+      a=n;
+      break;
+    }
+  }
+  return (a);
+}
+</code></pre>
+
+<h2>Dernier ajustement</h2>
+
+<p>Malgr&eacute; son efficacit&eacute;, cet algorithme soul&egrave;ve deux probl&egrave;mes importants : </p>
+
+<ul>
+<li><p>Premi&egrave;rement, lorsque la Q-Table est vide, sum vaut 0 donc r vaut 0 mais runningSum vaut aussi toujours 0. Ainsi le programme ne validera jamais le 'if' et retournera
+toujours a=0.</p></li>
+<li><p>Deuxi&egrave;mement, si (S;A1) a rapport&eacute; une r&eacute;compense donc (S;A1)=1 mais que (S;A2)=0 et (S;A3)=0, alors la prochaine fois l'agent s&eacute;lectionnera toujours (S;A1) et jamais les autres actions
+alors que (S;A1) n'a rapport&eacute; qu'une seule r&eacute;compense.</p></li>
+</ul>
+
+<p>Initialiser les Q[A][S] &agrave; une valeur sup&eacute;rieure &agrave; z&eacute;ro est d&eacute;licat car les algorithmes de calcul des r&eacute;compenses d&eacute;pendent de la valeur de Q[A][S]. En gros, il ne faut pas que les
+algorithmes d'apprentissage croient qu'une action A peut mener &agrave; un &eacute;tat S' avec une r&eacute;compense alors que cet &eacute;tat n'a jamais &eacute;t&eacute; atteint.</p>
+
+<p>Pour r&eacute;soudre ces probl&egrave;mes, nous avons tr&egrave;s l&eacute;g&egrave;remet modifi&eacute; l'algorithme pour ajouter un composante al&eacute;atoire au choix. Ainsi, on conserve le m&ecirc;me algo mais au lieu de traiter
+q[A][S], on traite q[A][S]+0.01</p>
+
+<p>L'algorithme devient (en javascript) : </p>
+
+<pre><code>function pickAction(currentState) {
+  var sum=0;
+  for (var i=0; i&lt;3; i++)
+    sum+=q[currentState.vision][currentState.lastAction][i]+0.01;
+  var r=Math.random()*sum;
+  var runningSum=0, a=0;
+  for (var n=0; n&lt;3; n++) {
+    runningSum+=q[currentState.vision][currentState.lastAction][n]+0.01;
+    if (r&lt;runningSum) {
+      a=n;
+      break;
+    }
+  }
+  return (a);
+}
+</code></pre>

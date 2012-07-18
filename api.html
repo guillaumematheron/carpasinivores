@@ -1,0 +1,58 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>API</h1>
+
+<p>Le code entr&eacute; dans la fen&ecirc;tre de code est ex&eacute;cut&eacute; &agrave; chaque it&eacute;ration du programme sur tous les &ecirc;tres-verts programmables (d&eacute;pend du mode).</p>
+
+<p>La variable 'me' d&eacute;signe l'&ecirc;tre-vert courant. Vous pouvez utiliser cinq variables comme vous le voulez. Ces variables repr&eacute;sentent en quelque sorte la 'm&eacute;moire'
+de l'&ecirc;tre-vert. Par d&eacute;faut ces cinq variables sont initialis&eacute;es &agrave; 0. Ces variables sont <code>me.var1</code>, <code>me.var2</code>, <code>me.var3</code>, <code>me.var4</code> et <code>me.var5</code>.</p>
+
+<p>Vous pouvez utiliser les fonction suivantes sur la variable 'me' pour avoir des informations sur les perceptions sensorielles de l'&ecirc;tre-vert : </p>
+
+<ul>
+<li><p><code>me.getColor()</code></p>
+
+<p>Renvoie la couleur vue par l'oeil de l'&ecirc;tre-vert. Utilisez <code>me.getColor().r</code>, <code>me.getColor().g</code> et <code>me.getColor().b</code> pour obtenir les diff&eacute;rentes composantes (rouge, vert et
+bleu respectivement) de la couleur vue (chaque canal renvoie une valeur entre 0 et 1);</p></li>
+<li><p><code>me.getSmell()</code></p>
+
+<p>Si un &eacute;l&eacute;ment color&eacute; est au contact de l'&ecirc;tre-vert, renvoie sa couleur. Vous pouvez r&eacute;cup&eacute;rer les composantes de la couleur de la m&ecirc;me fa&ccedil;on que pour <code>me.getColor()</code>.</p></li>
+</ul>
+
+<p>Vous pouvez utiliser les fonctions suivantes sur la variable 'me' pour avoir des informations sur les perceptions somesth&eacute;siques de l'&ecirc;tre-vert :</p>
+
+<ul>
+<li><p><code>me.getHunger()</code></p>
+
+<p>Renvoie la faim de l'&ecirc;tre-vert (entre 0 et 1);</p></li>
+<li><p><code>me.getFatigue()</code></p>
+
+<p>Renvoie la fatique de l'&ecirc;tre-vert (entre 0 et 1);</p></li>
+<li><p><code>me.getLust()</code></p>
+
+<p>Renvoie la b&eacute;b&eacute;mania de l'&ecirc;tre-vert (entre 0 et 1);</p></li>
+<li><p><code>me.getPain()</code></p>
+
+<p>Renvoie la douleur ressentie par l'&ecirc;tre-vert (entre 0 et 1).</p></li>
+</ul>
+
+<p>Vous pouvez utiliser les fonction suivantes sur la variable 'me' pour agir sur l'&eacute;l&eacute;ment courant :</p>
+
+<ul>
+<li><p><code>me.forward(distance)</code></p>
+
+<p>Avance de la distance sp&eacute;cifi&eacute;e (en pixels par seconde);</p></li>
+<li><p><code>me.rotate(angle)</code></p>
+
+<p>Tourne de l'angle sp&eacute;cifi&eacute; (en degr&eacute;s d'angle par seconde).</p>
+
+<blockquote>
+  <p>Astuce : pour faire un demi-tour instantan&eacute;ment, utilisez <code>me.rotate(180*deltaTime)</code>.
+Vous pouvez utiliser cette notation pour tourner de nimporte quel angle instantan&eacute;ment.</p>
+</blockquote></li>
+</ul>
+
+<blockquote>
+  <p>Remarque : Les capteurs ne sont pas mis &agrave; jour durant l'ex&eacute;cution de votre code, donc pas exemple si votre &eacute;l&eacute;ment voit du bleu, et que vous lui faites faire un demi-tour,
+un nouvel appel &agrave; <code>me.getColor()</code> reverra toujours la couleur bleue, car les modifications ne sont appliqu&eacute;es qu'&agrave; la fin de votre code.</p>
+</blockquote>

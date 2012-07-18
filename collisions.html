@@ -1,0 +1,26 @@
+<p><a href="index.html"><img src="logo.png" alt="Logo" title="" /></a></p>
+
+<h1>Gestion des collisions</h1>
+
+<p>L'aire de jeu est d&eacute;coup&eacute;e en cellules de 40x40 pixels. Chaque cellule maintient en permenance une liste cha&icirc;n&eacute;e des &eacute;l&eacute;ments pr&eacute;sents dans la cellule. A chaque fois
+qu'un &eacute;l&eacute;ment bouge sur la sc&egrave;ne, un syst&egrave;me v&eacute;rifie si l'&eacute;l&eacute;ment change de cellule. S'il en change, les listes cha&icirc;n&eacute;es sont mises &agrave; jour. Ce processur prend un temps en O(1).</p>
+
+<p>Pour savoir si une collision a lieu avec un objet A, on &eacute;num&egrave;re tous les objets dans les cellules autour de l'objet A et on teste individuellement si ils sont en contact.
+Ainsi on n'a besoin d'&eacute;num&eacute;r&eacute;er qu'un nombre limit&eacute; d'objets.</p>
+
+<p>Pour &eacute;viter que deux objets puissent se superposer, il faut <em>r&eacute;soudre la collision</em> quand elle se pr&eacute;sente. Nous avont exp&eacute;riment&eacute; deux m&eacute;thodes pour faire cela : </p>
+
+<ul>
+<li><p>Limiter l'amplitude du d&eacute;placement &agrave; la distance maximale pour laquelle il n'y a pas de collision</p>
+
+<p><img src="coll1.png" alt="Sch&eacute;ma" title="" /></p>
+
+<p>Dans ce cas la direction du d&eacute;placement est pr&eacute;serv&eacute;e, c'est-&agrave;-dire que l'objet ne sera jamais d&eacute;plac&eacute; selon un axe autre que celui demand&eacute;, ou encore qu'un &ecirc;tre-vert
+dont la seule instruction soit me.forward(20); aura toujours la m&ecirc;me trajectoire peu importe les obstacles rencontr&eacute;s. Face &agrave; un obstacle immobile, l'&ecirc;tre-vert sera bloqu&eacute;
+ind&eacute;finiment.</p></li>
+<li><p>'Sortir' l'objet de l'obstacle en effectuant le d&eacute;placement le plus court possible</p>
+
+<p><img src="coll2.png" alt="Sch&eacute;ma" title="" /></p>
+
+<p>Dans ce cas l'objet 'glisse' sur les obstacles et ne reste pas bloqu&eacute;. C'est cette approche qui a &eacute;t&eacute; choisie pour les carpasinivores.</p></li>
+</ul>
