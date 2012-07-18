@@ -99,8 +99,30 @@ function showLink() {
   window.alert('Use the following link to show your configuration to your friend/teacher : '+link);
 }
 
+function getMobile() {
+  isMobile={
+    Android: function() {
+      return navigator.userAgent.match(/Android/i) ? true : false;
+    },
+    BlackBerry: function() {
+      return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+    },
+    iOS: function() {
+      return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+    },
+    Windows: function() {
+      return navigator.userAgent.match(/IEMobile/i) ? true : false;
+    },
+    any: function() {
+      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+    }
+  };
+  return (isMobile);
+}
+
 //Entry point
 function loaded() {
+  console.log('mobile : '+getMobile().any());
   var argParams='';
   var args=getUrlParameters();
   if (args!=null) { //TODO
@@ -143,6 +165,11 @@ function loaded() {
   };
   document.getElementById('gameMode').onchange=upMode;
   upMode();
+
+  if (getMobile().any()==true) {
+    document.getElementById('code').cols='30';
+    document.getElementById('logo').style.width='200px';
+  }
 }
 
 function resetCode() {

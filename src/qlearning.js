@@ -2,13 +2,14 @@ q=Array(8);
 n=Array(8);
 
 function buildQTable() {
+  var w=(getMobile().any())?30:60;
   for (var i=0; i<3; i++) {
     for (var j=0; j<3; j++) {
       var el=document.getElementById('q'+i+''+j)
       var txt='';
       txt+='<table style="padding: 0px; margin: 0px;">';
       for (var k=0; k<9; k++) {
-        txt+='<tr><td><div style="background-color:rgb(0,0,'+32*k+'); width: 20px; height: 5px;"></div></td><td><div style="background-color:rgb(0,0,0); width: 60px; height: 5px;" id="q'+i+''+j+''+k+'"></div></td></tr>';
+        txt+='<tr><td><div style="background-color:rgb(0,0,'+32*k+'); width: 20px; height: 5px;"></div></td><td><div style="background-color:rgb(0,0,0); width: '+w+'px; height: 5px;" id="q'+i+''+j+''+k+'"></div></td></tr>';
       }
       txt+='</table>';
       el.innerHTML=txt;
