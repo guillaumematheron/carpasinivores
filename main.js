@@ -138,8 +138,8 @@ function loaded() {
 
   if (argParams!='' && argParams.search('autoStart')!=-1) startClicked();
 
-  upMode=function() {document.getElementById('code').disabled=(this.value=='qlearning');
-    document.getElementById('qLHelp').style.display=(this.value==='qlearning')?'':'none';
+  upMode=function(element) {document.getElementById('code').disabled=(document.getElementById('gameMode').value=='qlearning');
+    document.getElementById('qLHelp').style.display=(document.getElementById('gameMode').value==='qlearning')?'':'none';
   };
   document.getElementById('gameMode').onchange=upMode;
   upMode();
