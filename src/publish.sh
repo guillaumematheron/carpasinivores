@@ -12,7 +12,7 @@ for file in `ls *.md`
 done
 
 echo Copying documentation and sources onto server
-cp *.png simulator.html ..
-scp ../*.png ../*.html *.js carpasinivores@198.245.54.228:/var/www/carpasinivores
+cp *.png simulator.html *.js ..
+scp ../*.png ../*.html ../*.js carpasinivores@198.245.54.228:/var/www/carpasinivores
 
 rm header
