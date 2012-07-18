@@ -1,0 +1,43 @@
+<p><a href="index.html"><img id="logo" src="logo.png" alt="Logo" title="" /></a></p>
+<script>
+
+
+function getMobile() {
+  isMobile={
+    Android: function() {
+      return navigator.userAgent.match(/Android/i) ? true : false;
+    },
+    BlackBerry: function() {
+      return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+    },
+    iOS: function() {
+      return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+    },
+    Windows: function() {
+      return navigator.userAgent.match(/IEMobile/i) ? true : false;
+    },
+    any: function() {
+      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+    }
+  };
+  return (isMobile);
+}
+
+document.body.onload=function() {
+  if (getMobile().any()==true) {
+    document.getElementById('logo').style.width='200px';
+  }
+};
+</script>
+<h1>D&eacute;ploiement sur plateformes mobiles</h1>
+
+<p>Nous avons utilis&eacute; PhoneGap en le connectant directement &agrave; notre d&eacute;p&ocirc;t gitHub</p>
+
+<p>Plusieurs adaptations ont &eacute;t&eacute; n&eacute;cessaires</p>
+
+<ul>
+<li><p>Un petit bout de js embarqu&eacute; dans toutes les pages web pour changer dynamiquement la taille du logo sur mobile</p></li>
+<li><p>Idem pour changer la taille de la Q-Table</p></li>
+<li><p>Pour &eacute;viter que notre application ne demande trop de permissions, on a utilis&eacute; un fichier <a href="https://build.phonegap.com/docs/config-xml">config.xml</a></p></li>
+<li><p>On a cahng&eacute; la taille par d&eacute;faut de l'aire de jeu de 15x10 &agrave; 6x6</p></li>
+</ul>

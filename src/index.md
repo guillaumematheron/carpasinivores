@@ -6,7 +6,7 @@ Le jeu des carpasinivores est une simulation interactive du comportement d'une c
 * Lancer le simulateur
   1. [Mode survie de l'espèce](simulator.html#gameMode=species&autoStart=true)
   2. [Mode survie d'un individu](simulator.html#gameMode=survival&autoStart=true)
-  3. [Mode de simulation de l'apprentissage par récompense](simulator.html#gameMode=qlearning&width=6&height=6&rain=0&kill=0.4&eat=0.4&drink=0.2&green=1&red=0&water=3&hunger=0&lust=0&autoStart=true)
+  3. [Mode de simulation de l'apprentissage par récompense](simulator.html#gameMode=qlearning&width=6&height=6&rain=-0.001&kill=0.4&eat=0.4&drink=0.2&green=1&red=0&water=3&hunger=0&lust=0&autoStart=true)
 
 * Documentation élève
   1. [Présentation de l'univers du simulateur](univers.md)
@@ -22,4 +22,5 @@ Le jeu des carpasinivores est une simulation interactive du comportement d'une c
   1. [À propos du passage de paramètres au simulateur](hashparams.md)
   2. [Calcul des collision](collisions.md)
   3. [Traçage de rayons](raycast.md)
+  4. [Déploiement sur plateformes mobiles](mobile.md)
 
