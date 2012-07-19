@@ -54,6 +54,10 @@ function g_init(w,h,fps,resourceFiles,onLoad,onFrame) {
   }
   globGame.addEventListener('enterframe',onFrame);
 
+  globGame.rootScene.addEventListener("touchstart",function() {});
+  globGame.rootScene.addEventListener("touchend",function() {});
+  globGame.rootScene.addEventListener("touchmove",function() {});
+
   globGame.start();
 }
 

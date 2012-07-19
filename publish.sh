@@ -7,14 +7,14 @@ for file in `ls *.md`
   cat $file >> `basename $file .md`_.md
   ./fr2html.sh `basename $file .md`_.md
   ./convertLinks.sh `basename $file .md`_.md
-  markdown `basename $file .md`_.md>../`basename $file .md`_.html
-  cat headerHTML ../`basename $file .md`_.html > ../`basename $file .md`.html
-  rm ../`basename $file .md`_.html
+  markdown `basename $file .md`_.md>release/`basename $file .md`_.html
+  cat headerHTML release/`basename $file .md`_.html > release/`basename $file .md`.html
+  rm release/`basename $file .md`_.html
   rm `basename $file .md`_.md
 done
 
 echo Copying documentation and sources onto server
-cp *.png *.html *.js *.xml ..
-scp ../*.png ../*.html ../*.js carpasinivores@198.245.54.228:/var/www/carpasinivores
+cp *.png *.html *.js *.xml release
+scp release/*.png release/*.html release/*.js index.html carpasinivores@198.245.54.228:/var/www/carpasinivores
 
 rm header
