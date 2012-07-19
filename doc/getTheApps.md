@@ -1,7 +1,4 @@
-
-<p><a href="index.html"><img id="logo" src="logo.png" alt="Logo" title="" /></a></p>
-
-<h1>T&eacute;l&eacute;charger l'application mobile</h1>
+<h1>Télécharger l'application mobile</h1>
 
 <table>
 <tr>
