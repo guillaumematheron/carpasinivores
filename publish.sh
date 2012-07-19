@@ -15,6 +15,7 @@ done
 
 echo Copying documentation and sources onto server
 cp *.png *.html *.js *.xml release
-scp release/*.png release/*.html release/*.js index.html carpasinivores@198.245.54.228:/var/www/carpasinivores
+scp -r release carpasinivores@198.245.54.228:/var/www/carpasinivores
+scp -r index_.html carpasinivores@198.245.54.228:/var/www/carpasinivores/index.html
 
 rm header

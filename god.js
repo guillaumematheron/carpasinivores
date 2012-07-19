@@ -169,7 +169,7 @@ function updateGod(deltaTime) {
       //Collision with water -> drink it
       if (ret.nearestObject.type=='water') {
         if (ret.nearestObject.element.radius>0 && green.data.hunger-drinkFactor*deltaTime>0) green.data.hunger-=drinkFactor*deltaTime;
-        if (gameMode=='qlearning') green.data.forward(200*Math.random()/deltaTime); //DEBUG qLearning
+        if (gameMode=='qlearning') green.data.forward((100+200*Math.random())/deltaTime); //DEBUG qLearning
         ret.nearestObject.changeRadius(-5*deltaTime);
         //If the water spot gets really small, delete it (to avoid having many very-small water spots on the scene, because they can't be detected by the eye
         if (ret.nearestObject.element.radius<3) {
