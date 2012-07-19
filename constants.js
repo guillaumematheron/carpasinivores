@@ -25,3 +25,4 @@ var hungerEvolution=0.02;
 var lustEvolution=0.02;
 
 var decompositionTime=5.0;
+var phoneGap=true;  //True by, default, but will be set to false if the phonegap library is not found

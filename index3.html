@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Les carpasinivores</title>
+    <style>
+      #panel {
+        display: block;
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        left: 30px;
+        top: 30px;
+        border: 1px solid black;
+      }
+      .moveable {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 100px;
+        right: 100px;
+      }
+      .green {
+        background-image: url('green.png');
+      }
+      .water{
+        background-image: url('water.png');
+      }
+      .eye{
+        background-image: url('eye.png');
+      }
+    </style>
+    <script>
+      var width=200;
+      var height=200;
+      var frame=0;
+      var starttime;
+      var lastUpdateTime;
+      var colorDots=Array();
+
+      function time() {
+        return (new Date().getTime())/1000.0;
+      }
+
+      function getElementsByClass(searchClass, domNode, tagName) {
+        if (domNode == null) domNode = document;
+        if (tagName == null) tagName = '*';
+        var el = new Array();
+        var tags = domNode.getElementsByTagName(tagName);
+        var tcl = " "+searchClass+" ";
+        for(i=0,j=0; i<tags.length; i++) { 
+          var test = " " + tags[i].className + " ";
+          if (test.indexOf(tcl) != -1) 
+            el[j++] = tags[i];
+        } 
+        return el;
+      } 
+
+      function positionElement(element, x, y, w, h) {
+        element.style.left=(x-w/2)+'px';
+        element.style.top=(y-h/2)+'px';
+      }
+
+      function update(deltaTime,e) {
+        color=rayCast(e.element);
+        e.update(deltaTime);
+        e.forward(30.0*deltaTime,0);
+        e.element.rotate(30*deltaTime);
+        document.getElementById('fatigue').innerHTML=e.getFatigue();
+        frame++;
+      }
+
+      function init() {
+        var w=new Water();
+        w.element.move(150,30);
+        var e=new Green();
+        e.element.move(200,100);
+        var e=new Green();
+        e.element.move(100,100);
+
+        document.getElementById('panel').style.width=width+'px';
+        document.getElementById('panel').style.height=height+'px';
+
+        //Run updater
+        framerate=3000.0;
+        startTime=time();
+        lastUpdateTime=time();
+        
+        up=function(){update(time()-lastUpdateTime,e); lastUpdateTime=time();setTimeout(up,(1.0/framerate)*1000);};
+        up();
+      }
+
+      function dumpObjects() {
+        debug ('Dumping objects');
+        for (i in colorDots) {
+          debug ('Color dot '+colorDots[i].x+' '+colorDots[i].y+' '+colorDots[i].color);
+        }
+        debug('');
+      }
+
+      function Element() {
+        this.type='element';
+        this.imageBaseName='abstract';
+        this.x=0;
+        this.y=0;
+        this.w=-1;  //Abstract
+        this.h=-1;  //Abstract
+        this.element=document.createElement('div');
+        document.getElementById('panel').appendChild(this.element);
+        this.element.className='moveable';
+        this.element.style.position="absolute";
+        this.element.style.left="0px";
+        this.element.style.top="0px";
+        this.element.style.width="1px";
+        this.element.style.hegiht="1px";
+        this.setSize=function(w,h) {
+          this.element.style.width=w+'px';
+          this.element.style.height=h+'px';
+          this.w=w;
+          this.h=h;
+          this.radius=this.w/2;
+        }
+        this.update=function() {
+          if (this.x>width) this.x-=width;
+          if (this.x<0) this.x+=width;
+          if (this.y>height) this.y-=height;
+          if (this.y<0) this.y+=height;
+          positionElement(this.element,this.x,this.y,this.w,this.h);
+        }
+        this.move=function(x,y) {
+          this.x+=x;
+          this.y+=y;
+          this.update();
+        }
+      }
+      function EyedElement() {
+        this.type='element';
+        this.rotation=0;
+        this.imageBaseName='abstract';
+        this.x=0;
+        this.y=0;
+        this.w=-1;  //Abstract
+        this.h=-1;  //Abstract
+        this.element=document.createElement('div');
+        document.getElementById('panel').appendChild(this.element);
+        this.element.className='moveable';
+        this.element.style.position="absolute";
+        this.element.style.left="0px";
+        this.element.style.top="0px";
+        this.element.style.width="1px";
+        this.element.style.hegiht="1px";
+        this.eye=document.createElement('div');
+        this.element.appendChild(this.eye);
+        this.eye.className='moveable eye';
+        this.eye.style.position='absolute';
+        this.eye.style.left='0px';
+        this.eye.style.top='0px';
+        this.eye.style.width='9px';
+        this.eye.style.height='9px';
+        this.eye.style.background_image="url('green.png')";
+        this.setSize=function(w,h) {
+          this.element.style.width=w+'px';
+          this.element.style.height=h+'px';
+          this.w=w;
+          this.h=h;
+          this.radius=this.w/2;
+        }
+        this.update=function() {
+          if (this.x>width) this.x-=width;
+          if (this.x<0) this.x+=width;
+          if (this.y>height) this.y-=height;
+          if (this.y<0) this.y+=height;
+          positionElement(this.element,this.x,this.y,this.w,this.h);
+        }
+        this.move=function(x,y) {
+          this.x+=x;
+          this.y+=y;
+          this.update();
+        }
+        this.rotate=function(angle_deg) {
+          this.rotation+=angle_deg;
+          var angle_rad=(this.rotation-90)*(Math.PI/180.0);
+          var c=5;  //Center of rotation
+          var s=5;  //Radius of rotation
+          var x=c+Math.cos(angle_rad)*s;
+          var y=c+Math.sin(angle_rad)*s;
+          this.eye.style.left=x+'px';
+          this.eye.style.top=y+'px';
+        }
+        this.forward=function(distance) {
+          var angle_rad=(this.rotation-90)*(Math.PI/180.0);
+          var dx=Math.cos(angle_rad)*distance;
+          var dy=Math.sin(angle_rad)*distance;
+          this.move(dx,dy)
+        } 
+      }
+
+      function Green() {
+        this.element=new EyedElement();
+        this.element.imageBaseName='green';
+        this.element.element.className=this.element.element.className+" green";
+        this.element.element.style.background_image="url('green.png')";
+        this.element.setSize(20,20);
+        this.type='green';
+        this.element.update();
+        equilibrumSpeed=10;
+        this.update=function(deltaTime) {
+          this.element.update();
+          this.cumulatedFatigueDistance-=equilibrumSpeed*deltaTime;
+        }
+        this.forward=function (d) {
+          this.element.forward(d);
+          this.cumulatedFatigueDistance+=d;
+        }
+        this.element.color=1;
+        colorDots[colorDots.length]=this.element;
+        this.hunger=0;
+        this.cumulatedFatigueDistance=0;
+        this.pain=0;
+        this.lust=0;
+        this.smell=0;
+        //Somesthesic sensors
+        this.getHunger=function() {return (this.hunger);}
+        this.getFatigue=function() {return (1.035-Math.exp(-this.cumulatedFatigueDistance/300.0));}
+        this.getPain=function() {return (this.pain);}
+        this.getLust=function() {return (this.lust);}
+        this.getSmell=function() {return (this.smell);}
+      }
+      
+      function Water() {
+        this.element=new Element();
+        this.element.imageBaseName='water';
+        this.element.element.className=this.element.element.className+" water";
+        this.element.element.style.background_image="url('water.png')";
+        this.element.setSize(40,40);
+        this.type='water';
+        this.element.update();
+        this.update=function() {
+          this.element.update();
+        }
+        this.element.color=3;
+        colorDots[colorDots.length]=this.element;
+      }
+
+      function debug(log) {
+        document.getElementById('debug').innerHTML=document.getElementById('debug').innerHTML+log+'<br />';
+      }
+      
+      function distanceToRay2(rayOrigin, rayTarget, ray) {
+        gm=new Vector();
+        gm.x=rayTarget.y-rayOrigin.y;
+        gm.y=rayTarget.y-rayOrigin.y;
+        gm2=gm.x*gm.x+gm.y*gm.y;
+        gm_ray=ray.x*gm.x+ray.y*gm.y;
+        if (gm_ray<0)  //Wrong direction
+          return (999999);  //Infinity
+        gm_ray2=gm_ray*gm_ray;
+        ray2=ray.x*ray.x+ray.y*ray.y;
+        r2=gm2-gm_ray2/ray2;
+        return (r2);
+      }
+      
+      function Vector() {
+        this.x=0;
+        this.y=0;
+      }
+
+      function rad(deg) {
+        return (deg*Math.PI/180.0);
+      }
+
+      function rayCast(casterDot) {
+        var ray=new Vector();
+        var color=-1;
+        ray.x=Math.cos(rad(casterDot.rotation+180)); 
+        ray.y=Math.sin(rad(casterDot.rotation+180));  
+        for (j in colorDots) {
+          if (casterDot!=colorDots[j]) {
+            dist=distanceToRay2(casterDot,colorDots[j],ray);
+            if (dist<=colorDots[j].radius) {color=colorDots[j].color;}
+          }
+        }
+        return (color);
+      }
+        
+      document.addEventListener("DOMContentLoaded",init,false);
+    </script>
+  </head>
+  <body>
+    <div id="panel"></div>
+    <div style="display:block; left: 500px; position: absolute; ">
+      <div id="fatigue"></div>
+      <input type="button" onclick="dumpObjects();" value="Dump objects" />
+    </div>
+    <div id="debug"><div>
+  </body>
+</html>

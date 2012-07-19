@@ -113,8 +113,14 @@ function getMobile() {
     Windows: function() {
       return navigator.userAgent.match(/IEMobile/i) ? true : false;
     },
+    WebOS: function() {
+      return navigator.userAgent.match(/webOS/i) ? true : false;
+    },
+    Symbian: function() {
+      return navigator.userAgent.match(/SymbianOS/i) ? true : false;
+    },
     any: function() {
-      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows() || isMobile.WebOS() || isMobile.Symbian() );
     }
   };
   return (isMobile);
