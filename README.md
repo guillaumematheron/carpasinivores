@@ -3,6 +3,39 @@ carpasinivores
 
 Grain 3.0 : les carpasinivores
 
+Repository architecture
+=======================
+
+The git repository has 4 top-level folders : 
+
+- sources
+  
+  We didn't use 'src' because on blackberry devices this name is reserved
+
+  Contains the js, png, xcf and html sources of the simulator
+
+- doc
+  
+  Contains md, xcf and png files (sources of the doc). The md files are dynamically converted to html by tools/publish.sh
+
+  doc/headerHTML and doc/footerHTML are app-(prep-)ended to generated HTML files
+
+- tools
+  
+  Contains publish.sh
+
+- release
+  
+  Contains the generated app. This must stay on GitHub because PhoneGap gets its sources directly from GitHub.
+
+- index.html
+
+  Redirects to release/index.html. Required because PhoneGap only pulls its app from the repo root
+
+- config.xml and icon.png
+
+  Required by PhoneGap
+
 API
 ===
 
