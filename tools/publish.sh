@@ -1,3 +1,13 @@
+test=`pwd|xargs echo|sed 's/^.*\/\([^\/][^\/]*\)$/\1/'`
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ "$test" != "tools" ]
+  then
+  echo 'Ran from the wrong dir ! cd-ing into the script dir'
+  cd $DIR
+  echo `pwd`
+fi
+
+
 for file in `ls ../doc/*.md`
   do
   echo Converting file $file
@@ -25,11 +35,9 @@ done
 echo Copying files to release dir
 cp ../sources/*.html ../sources/*.js ../release
 cp ../doc/*.png ../release
-
-exit
+cp -r ../sources/bootstrap ../release
 
 echo Copying documentation and sources onto server
-cp *.png *.html *.js *.xml release
-scp -r release carpasinivores@198.245.54.228:/var/www/carpasinivores
-scp -r index_.html carpasinivores@198.245.54.228:/var/www/carpasinivores/index.html
+scp -r ../release carpasinivores@198.245.54.228:/var/www/carpasinivores
+scp -r ../index.html carpasinivores@198.245.54.228:/var/www/carpasinivores/index.html
 

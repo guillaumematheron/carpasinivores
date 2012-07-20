@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <title>Les carpasinivores</title>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<style>
+  body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+  }
+</style>
 </head>
 <body>
 
 
-<p><a href="index.html"><img id="logo" src="logo.png" alt="Logo" title="" /></a></p>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="index.html" style="margin: 0; margin-right: 30px; margin-top: 3px; padding:0;"><img src="logo.png" style="height: 35px; padding: 0; margin: 0;"/></a>
+      <div class="nav-collapse">
+        <ul class="nav">
+          <li class="active"><a href="index.html">Documentation</a></li>
+          <li><a href="simulator.html">Simulateur</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+
 <p id="getTheApp_android" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/android">Download Android app</a></p>
 <p id="getTheApp_ios" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/iosd">Download iOS app</a></p>
 <p id="getTheApp_winphone" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/winphone">Download Windows phone app</a></p>
@@ -100,3 +130,24 @@ au carr&eacute;.</p>
 durant une simulation avec des &ecirc;tres-verts, des &ecirc;tres-rouges et de l'eau (quantit&eacute; d'eau non repr&eacute;sent&eacute;e) :</p>
 
 <p><img src="graph2.png" alt="Graphique" title="" /></p>
+	</div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap-transition.js"></script>
+    <script src="bootstrap/js/bootstrap-alert.js"></script>
+    <script src="bootstrap/js/bootstrap-modal.js"></script>
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="bootstrap/js/bootstrap-tab.js"></script>
+    <script src="bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="bootstrap/js/bootstrap-popover.js"></script>
+    <script src="bootstrap/js/bootstrap-button.js"></script>
+    <script src="bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="bootstrap/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
