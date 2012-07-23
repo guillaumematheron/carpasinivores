@@ -73,9 +73,6 @@
 	}
 
 	</script>
-
-	<script type="text/javascript">phoneGap=true;</script>
-	<script type="text/javascript" src="phonegap.js" onerror="phoneGap=false;"></script>
 </head>
 <body>
 
@@ -93,6 +90,8 @@
 		if (document.getElementById('getTheApps')!=null)
 		  document.getElementById('getTheApps').style.display='';
 	  }
+	  if (phoneGap===false) {
+	  	document.getElementById('getTheAppsWide').style.display='none';
 	};
 </script>
 
@@ -117,6 +116,7 @@
 
 <div class="container" id="main">
 
+<div id="getTheAppsWide">
 <p id="getTheApp_android" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/android">Download Android app</a></p>
 <p id="getTheApp_ios" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/iosd">Download iOS app</a></p>
 <p id="getTheApp_winphone" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/winphone">Download Windows phone app</a></p>
@@ -124,3 +124,4 @@
 <p id="getTheApp_webos" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/webos">Download WebOS app</a></p>
 <p id="getTheApp_symbian" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/symbian">Download Symbian app</a></p>
 <div id="getTheApps" style="display: none"><a href="getTheApps.html">T&eacute;l&eacute;charger l'application mobile</a></div>
+</div>
