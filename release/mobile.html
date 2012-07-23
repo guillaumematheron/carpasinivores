@@ -1,20 +1,100 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<title>Les carpasinivores</title>
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="">
-<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-<style>
-  body {
-    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-  }
-</style>
+  <title>Les carpasinivores</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no"> 
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <script type="text/javascript" src="constants.js"></script>
+  <script type="text/javascript" src="enchant.js"></script>
+  <script type="text/javascript" src="canvas.enchant.js"></script>
+  <script type="text/javascript" src="linkedlist.js"></script>
+  <script type="text/javascript" src="qlearning.js"></script>
+  <script type="text/javascript" src="graphics_abstract_enchantjs.js"></script>
+  <script type="text/javascript" src="god.js"></script>
+  <script type="text/javascript" src="ia.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+  <!-- If the phonegap library is present, set a global variable -->
+  <script type="text/javascript" src="phonegap.js" onerror="phoneGap=false;"></script>
+  <style type="text/css">
+      #controlPanel {
+      }
+      #debug2 {
+        display:block;
+      }
+   /*   #left {
+        float:left;
+        margin-right: 30px;
+        padding: 0;
+      }
+
+      #right {
+      }
+
+      #footer {
+        clear: both;
+      }*/
+
+      #main {
+        margin-top: 60px;
+      }
+
+  </style>
+
+  <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+  
+	<script type="text/javascript">
+	function getMobile() {
+	  isMobile={
+		Android: function() {
+		  return navigator.userAgent.match(/Android/i) ? true : false;
+		},
+		BlackBerry: function() {
+		  return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+		},
+		iOS: function() {
+		  return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+		},
+		Windows: function() {
+		  return navigator.userAgent.match(/IEMobile/i) ? true : false;
+		},
+		WebOS: function() {
+		  return navigator.userAgent.match(/webOS/i) ? true : false;
+		},
+		Symbian: function() {
+		  return navigator.userAgent.match(/SymbianOS/i) ? true : false;
+		},
+		any: function() {
+		  return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows() || isMobile.WebOS() || isMobile.Symbian() );
+		}
+	  };
+	  return (isMobile);
+	}
+
+	</script>
+
+	<script type="text/javascript">phoneGap=true;</script>
+	<script type="text/javascript" src="phonegap.js" onerror="phoneGap=false;"></script>
 </head>
 <body>
 
+<script type="text/javascript">
+	document.body.onload=function() {
+	  if (getMobile().any()==true) {
+		if (getMobile().Android()==true) document.getElementById('getTheApp_android').style.display='';
+		if (getMobile().iOS()==true) document.getElementById('getTheApp_ios').style.display='';
+		if (getMobile().Windows()==true) document.getElementById('getTheApp_windows').style.display='';
+		if (getMobile().BlackBerry()==true) document.getElementById('getTheApp_blackberry').style.display='';
+		if (getMobile().WebOS()==true) document.getElementById('getTheApp_webos').style.display='';
+		if (getMobile().Symbian()==true) document.getElementById('getTheApp_symbian').style.display='';
+	  }
+	  else {
+		if (document.getElementById('getTheApps')!=null)
+		  document.getElementById('getTheApps').style.display='';
+	  }
+	};
+</script>
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -34,8 +114,8 @@
   </div>
 </div>
 
-<div class="container">
 
+<div class="container" id="main">
 
 <p id="getTheApp_android" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/android">Download Android app</a></p>
 <p id="getTheApp_ios" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/iosd">Download iOS app</a></p>
@@ -44,54 +124,6 @@
 <p id="getTheApp_webos" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/webos">Download WebOS app</a></p>
 <p id="getTheApp_symbian" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/symbian">Download Symbian app</a></p>
 <div id="getTheApps" style="display: none"><a href="getTheApps.html">T&eacute;l&eacute;charger l'application mobile</a></div>
-
-<script type="text/javascript">phoneGap=true;</script>
-<script type="text/javascript" src="phonegap.js" onerror="phoneGap=false;"></script>
-
-<script type="text/javascript">
-function getMobile() {
-  isMobile={
-    Android: function() {
-      return navigator.userAgent.match(/Android/i) ? true : false;
-    },
-    BlackBerry: function() {
-      return navigator.userAgent.match(/BlackBerry/i) ? true : false;
-    },
-    iOS: function() {
-      return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
-    },
-    Windows: function() {
-      return navigator.userAgent.match(/IEMobile/i) ? true : false;
-    },
-    WebOS: function() {
-      return navigator.userAgent.match(/webOS/i) ? true : false;
-    },
-    Symbian: function() {
-      return navigator.userAgent.match(/SymbianOS/i) ? true : false;
-    },
-    any: function() {
-      return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows() || isMobile.WebOS() || isMobile.Symbian() );
-    }
-  };
-  return (isMobile);
-}
-
-document.body.onload=function() {
-  if (getMobile().any()==true) {
-    document.getElementById('logo').style.width='200px';
-    if (getMobile().Android()==true) document.getElementById('getTheApp_android').style.display='';
-    if (getMobile().iOS()==true) document.getElementById('getTheApp_ios').style.display='';
-    if (getMobile().Windows()==true) document.getElementById('getTheApp_windows').style.display='';
-    if (getMobile().BlackBerry()==true) document.getElementById('getTheApp_blackberry').style.display='';
-    if (getMobile().WebOS()==true) document.getElementById('getTheApp_webos').style.display='';
-    if (getMobile().Symbian()==true) document.getElementById('getTheApp_symbian').style.display='';
-  }
-  else {
-    if (document.getElementById('getTheApps')!=null)
-      document.getElementById('getTheApps').style.display='';
-  }
-};
-</script>
 <h1>D&eacute;ploiement sur plateformes mobiles</h1>
 
 <p>Nous avons utilis&eacute; PhoneGap en le connectant directement &agrave; notre d&eacute;p&ocirc;t gitHub</p>

@@ -174,7 +174,6 @@ function loaded() {
 
   if (getMobile().any()==true) {
     document.getElementById('code').cols='30';
-    document.getElementById('logo').style.width='200px';
   }
 }
 
