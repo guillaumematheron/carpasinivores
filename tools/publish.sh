@@ -16,7 +16,7 @@ for file in `ls ../doc/*.md`
 
   #Copy each file into release dir
   cat ../doc/$file >> ../release/$base_.md
-  
+
   #Patch for accentuated characters
   ./fr2html.sh ../release/$base_.md
 
@@ -27,7 +27,7 @@ for file in `ls ../doc/*.md`
   markdown ../release/$base_.md>../release/$base_.html
 
   #Wrap in html
-  cat ../doc/headerHTML ../release/$base_.html ../doc/footerHTML > ../release/$base.html
+  cat ../doc/header.html ../release/$base_.html ../doc/footer.html > ../release/$base.html
   rm ../release/$base_.html
   rm ../release/$base_.md
 done
@@ -40,4 +40,3 @@ cp -r ../sources/bootstrap ../release
 echo Copying documentation and sources onto server
 scp -r ../release carpasinivores@198.245.54.228:/var/www/carpasinivores
 scp -r ../index.html carpasinivores@198.245.54.228:/var/www/carpasinivores/index.html
-
