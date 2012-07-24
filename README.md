@@ -104,3 +104,10 @@ The page contains several panels that are used in the different game modes.
    spreadsheet software to plot the evolution of the number of green and red elements. Note that this view does not appear in 'Q-Learning' mode because you typically observe very few
    elements in this mode.
  - The *Q-Table* panel shows the current content of the Q-Table. Each row corresponds to a state (there are 24 states), and each column to an action (3 actions).
+
+
+Dev notes
+=========
+
+- This application seems to conflict with Firefox extension 'Disconnect'
+
