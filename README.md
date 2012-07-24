@@ -7,11 +7,11 @@ Grain 3.0 : [les carpasinivores](http://198.245.54.228/carpasinivores)
 - `index.html`
 
     Redirects to `release/index.html`. Required because PhoneGap only
-    pulls its app from the repo root
+    pulls its app from the repo root.
 
 - `config.xml` and `icon.png`
 
-    Required by PhoneGap
+    Required by PhoneGap.
 
 The git repository has 4 top-level folders : 
 
@@ -20,19 +20,19 @@ The git repository has 4 top-level folders :
     We didn't use 'src' because on blackberry devices this name is
     reserved.
 
-    Contains the js, png, xcf and html sources of the simulator
+    Contains the js, png, xcf and html sources of the simulator.
 
 - `/doc`
   
     Contains md, xcf and png files (sources of the doc). The md files
-    are dynamically converted to html by tools/publish.sh
+    are dynamically converted to html by `tools/publish.sh`.
 
     `doc/headerHTML` and `doc/footerHTML` are app-(prep-)ended to
     generated HTML files.
 
 - `/tools`
   
-    Contains `publish.sh`
+    Contains `publish.sh`.
 
 - `/release`
   
@@ -146,7 +146,7 @@ The page contains several panels that are used in the different game modes.
    
     If you enter settings that show an interesting result, you can
     share your simulation with friends and/or teachers by pressing
-    'Link to these settings'. If you entered your own code in the
+    *Link to these settings*. If you entered your own code in the
     *code* panel, you will have to include this code as well.
  
 - The *control* panel lets you observe the inputs of one of the
