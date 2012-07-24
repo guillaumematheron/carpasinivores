@@ -126,15 +126,88 @@
 <p id="getTheApp_symbian" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/symbian">Download Symbian app</a></p>
 </div>
 <div id="getTheApps" style="display: none"><a href="getTheApps.html">T&eacute;l&eacute;charger l'application mobile</a></div>
-<h1>Tra&ccedil;age de rayons</h1>
+<h1>EnchantJS patching</h1>
 
-<p>Le tra&ccedil;ade de rayon ou <em>raycast</em> permet de d&eacute;terminer la couleur de l'objet en face de l'oeil des &ecirc;tres-verts.</p>
+<p>I had to make a few patchs to the enchantJS library to meet my needs, here is a commented diff of the previous version and the patched version</p>
 
-<p>Tous les &eacute;l&eacute;ments color&eacute;s du monde des carpasinivores sont circulaires.</p>
+<ul>
+<li><p>Changed header</p>
 
-<p>On utilise le m&ecirc;me principe que pour la <a href="collisions.html">r&eacute;solution des collisions</a> pour r&eacute;cup&eacute;rer la liste des &eacute;l&eacute;ments &agrave; proximit&eacute; de l'objet courrant. Plus pr&eacute;cis&eacute;ment, 
-on d&eacute;termine le quart de cercle dans lequel est le rayon (nord-ouest, nord-est, sud-ouest ou sud-est). Ensuite, on cherche les &eacute;l&eacute;ments dans les cellules du quart de cercle
-et on calcule pour chacune la distance entre le centre de l'&eacute;l&eacute;ment et le rayon.</p>
+<p>0a1,2</p>
+
+<blockquote>
+  <p>//Code modified on 20120703 by Guillaume Matheron (INRIA)</p>
+</blockquote></li>
+<li><p>Game constructor now takes an additionnal parameter : the DOM object in which to display the game canvas</p>
+
+<p>601c603
+  &lt;     initialize: function(width, height) {</p>
+
+<hr />
+
+<blockquote>
+<pre><code>initialize: function(width, height, container) {
+</code></pre>
+
+<p>634,635c636,637</p>
+</blockquote></li>
+<li><p>The game should not take the dimensions of the window, but stick to the dimensions that were given as a param to the construction
+This avoids stretching of the game area</p>
+
+<p>&lt;             stage.style.width = window.innerWidth + 'px';
+  &lt;             stage.style.height = window.innerHeight + 'px';</p>
+
+<hr />
+
+<blockquote>
+<pre><code>        stage.style.width = width + 'px';
+      stage.style.height = height + 'px';
+</code></pre>
+</blockquote></li>
+<li><p>Append the stage to <code>container</code> rather than <code>document.body</code></p>
+
+<p>637,638c639,640
+  &lt;             if (document.body.firstChild) {
+  &lt;                 document.body.insertBefore(stage, document.body.firstChild);</p>
+
+<hr />
+
+<blockquote>
+<pre><code>        if (container.firstChild) {
+          container.insertBefore(stage, container.firstChild);
+</code></pre>
+
+<p>640c642
+  &lt;                 document.body.appendChild(stage);</p>
+</blockquote>
+
+<hr />
+
+<blockquote>
+<pre><code>            container.appendChild(stage);
+</code></pre>
+</blockquote></li>
+<li><p>Impose the size of the container</p>
+
+<p>641a644,645</p>
+
+<blockquote>
+<pre><code>        container.style.width=stage.style.width;
+      container.style.height=stage.style.height;
+</code></pre>
+</blockquote></li>
+<li><p>Prevent rescaling of the game area</p>
+
+<p>645a650</p>
+
+<blockquote>
+<pre><code>        this.scale=1;
+</code></pre>
+
+<p>656a662
+                this.scale=1</p>
+</blockquote></li>
+</ul>
 	</div> <!-- /container -->
 
     <!-- Le javascript

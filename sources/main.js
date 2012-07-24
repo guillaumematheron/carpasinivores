@@ -173,7 +173,8 @@ function loaded() {
   upMode();
 
   if (getMobile().any()==true) {
-    //document.getElementById('code').cols='30';
+    document.getElementById('code').cols='30';
+    document.getElementById('shareConfig').style.display='none';
   }
 }
 

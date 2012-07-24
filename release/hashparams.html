@@ -87,11 +87,12 @@
 		if (getMobile().Symbian()==true) document.getElementById('getTheApp_symbian').style.display='';
 	  }
 	  else {
-		if (document.getElementById('getTheApps')!=null)
-		  document.getElementById('getTheApps').style.display='';
+	    if (document.getElementById('getTheApps')!=null)
+	      document.getElementById('getTheApps').style.display='';
 	  }
-	  if (phoneGap===false) {
-	  	document.getElementById('getTheAppsWide').style.display='none';
+	  if (phoneGap!==false) {
+	    document.getElementById('getTheAppsWide').style.display='none';
+          }
 	};
 </script>
 
@@ -123,8 +124,8 @@
 <p id="getTheApp_blackberry" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/blackberry">Download Blackberry app</a></p>
 <p id="getTheApp_webos" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/webos">Download WebOS app</a></p>
 <p id="getTheApp_symbian" style="display: none"><a href="https://build.phonegap.com/apps/163737/download/symbian">Download Symbian app</a></p>
-<div id="getTheApps" style="display: none"><a href="getTheApps.html">T&eacute;l&eacute;charger l'application mobile</a></div>
 </div>
+<div id="getTheApps" style="display: none"><a href="getTheApps.html">T&eacute;l&eacute;charger l'application mobile</a></div>
 <h1>Hash parameters</h1>
 
 <p>Les carpasinivores utilisent une fonctionnalit&eacute; assez peu r&eacute;pandue pour passer des param&egrave;tres &agrave; l'application javascript.</p>
@@ -135,6 +136,13 @@
 
 <pre><code>file:///D:/carpasinivores/index.html#nom1=valeur1&amp;nom2=valeur2
 </code></pre>
+
+<p>Les hashParams actuellement support&eacute;s par l'applications sont</p>
+
+<ul>
+<li><p>L'id de n'importe quel champ du formulaire de param&egrave;tres;</p></li>
+<li><p><code>autoStart</code>. Si ce param&egrave;tre est d&eacute;fini &agrave; 1, valide automatiquement les param&egrave;tres entr&eacute;s.</p></li>
+</ul>
 	</div> <!-- /container -->
 
     <!-- Le javascript
