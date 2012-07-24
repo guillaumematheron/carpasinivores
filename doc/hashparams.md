@@ -9,3 +9,8 @@ Un exemple de lien est par exemple :
 
     file:///D:/carpasinivores/index.html#nom1=valeur1&nom2=valeur2
 
+Les hashParams actuellement supportés par l'applications sont
+
+- L'id de n'importe quel champ du formulaire de paramètres;
+
+- `autoStart`. Si ce paramètre est défini à 1, valide automatiquement les paramètres entrés.
