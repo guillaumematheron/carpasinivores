@@ -23,4 +23,5 @@ Le jeu des carpasinivores est une simulation interactive du comportement d'une c
   2. [Calcul des collision](collisions.md)
   3. [Traçage de rayons](raycast.md)
   4. [Déploiement sur plateformes mobiles](mobile.md)
-
+  5. [Patch ajoutés au module EnchantJS (en anglais)](patchEnchantJS.md)
+  6. [Coup d'oeil aux autres librairies JS possibles](otherLibs.md)
