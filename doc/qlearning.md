@@ -1,4 +1,4 @@
-# Q-Learning
+# Apprentissage par récompense (ou ré-enforcement) : le «Q-learning»
 
 Dans ce mode, tous les êtres-verts sont des « bêtes » gérées par
 l'ordinateur, mais celui qui a une bordure noire a un algorithme

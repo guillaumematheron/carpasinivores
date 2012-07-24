@@ -1,4 +1,4 @@
-# Exemples de simulations intéressantes
+# Simulation au niveau de la population : la problématique proies-prédateurs
 
 ## Équilibre proies-prédateurs avec deux espèces
 

@@ -4,11 +4,11 @@
 
 pull :
 #	update from the repository
-	git pull
+	cd .. ; git pull
 
 push :
 #	commit onto the repository
-	git commit -a -m 'commited from makefile' ; git push
+	cd .. ; git commit -a -m 'commited from makefile' ; git push
 
 
 publish :
@@ -18,7 +18,7 @@ publish :
 clean :
 #	clean local files
 	./clean.sh
-	git status
+	cd .. ; git status
 
 
 #install :

@@ -1,7 +1,7 @@
 # Déploiement sur plateformes mobiles
 
-Nous avons utilisé PhoneGap en le connectant directement à notre dépôt
-GitHub.
+Nous avons utilisé [http://phonegap.com](PhoneGap) en le connectant directement à notre dépôt
+[GitHub](https://github.com/InriaMecsci/carpasinivores).
 
 Plusieurs adaptations ont été nécessaires :
 
