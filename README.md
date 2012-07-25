@@ -134,18 +134,35 @@ is a good move.
 ## Panels and HUDs
 
 The page contains several panels that are used in the different game modes.
- - The *code* panel lets you type your own program in 'survival of the species' and 'survival of an individual' modes. See the *API* for instructions on how to program your element(s).
- - The *settings* panel lets you enter custom settings for your simulation. Please be careful when changing these settings, you could crash the simulator or even overload your computer
-   if you get exponential growths.
-   If you enter settings that show an interesting result, you can share your simulation with friends and/or teachers by pressing 'Link to these settings'. If you entered your own code
-   in the *code* panel, you will have to include this code as well.
- - The *control* panel lets you observe the inputs of one of the elements (the one that has a black border).
- - The *CSV log* panel contains a log of the game states, each ten iterations. After you stop the game, you can copy-paste this data to a csv file and open it with your favourite
-   spreadsheet software to plot the evolution of the number of green and red elements. Note that this view does not appear in 'Q-Learning' mode because you typically observe very few
-   elements in this mode.
- - The *Q-Table* panel shows the current content of the Q-Table. Each row corresponds to a state (there are 24 states), and each column to an action (3 actions).
 
+- The *code* panel lets you type your own program in 'survival of the
+  species' and 'survival of an individual' modes. See the *API* for
+  instructions on how to program your element(s).
+
+- The *settings* panel lets you enter custom settings for your
+  simulation. Please be careful when changing these settings, you
+  could crash the simulator or even overload your computerif you get
+  exponential growths.
+  
+    If you enter settings that show an interesting result, you can
+    share your simulation with friends and/or teachers by pressing
+    'Link to these settings'. If you entered your own code in the
+    *code* panel, you will have to include this code as well.
+
+- The *control* panel lets you observe the inputs of one of the
+  elements (the one that has a black border).
+
+- The *CSV log* panel contains a log of the game states, each ten
+  iterations. After you stop the game, you can copy-paste this data to
+  a csv file and open it with your favourite spreadsheet software to
+  plot the evolution of the number of green and red elements. Note
+  that this view does not appear in 'Q-Learning' mode because you
+  typically observe very few elements in this mode.
+
+- The *Q-Table* panel shows the current content of the Q-Table. Each
+  row corresponds to a state (there are 24 states), and each column to
+  an action (3 actions).
 
 ## Dev notes
 
-- This application seems to conflict with Firefox extension 'Disconnect'
+- This application conflicts with Firefox extension [Disconnect](https://disconnect.me/).
