@@ -1,1 +1,1 @@
-rm -f *~ `find -name '*.md' | sed 's/.md$/.html/'`
+cd .. ; rm -f `find -name *~`
