@@ -34,6 +34,7 @@ function setCookie(c_name,value,exdays) {
 function stop() {
   stopped=true;
   document.getElementById('retry').style.display="";
+  document.getElementById('restart').style.display='';
   document.getElementById('stop').style.display="none";
 }
 
@@ -164,7 +165,10 @@ function loaded() {
 
   buildQTable();
 
-  if (argParams!='' && argParams.search('autoStart')!=-1) startClicked();
+  if (argParams!='' && argParams.search('autoStart')!=-1) {
+    document.getElementById('ckoica').style.display='';
+    startClicked();
+  }
 
   upMode=function(element) {document.getElementById('code').disabled=(document.getElementById('gameMode').value=='qlearning');
     document.getElementById('qLHelp').style.display=(document.getElementById('gameMode').value==='qlearning')?'':'none';
@@ -176,6 +180,8 @@ function loaded() {
     document.getElementById('code').cols='30';
     document.getElementById('shareConfig').style.display='none';
   }
+
+  if (argParams.search('startInStoppedState')!=-1) skipToStoppedState();
 }
 
 function resetCode() {
@@ -219,6 +225,10 @@ function startClicked() {
   hungerEvolution=document.getElementById('hunger').value;
   lustEvolution=document.getElementById('lust').value;
   g_init(width,height,30,Array('green_selected.png','gray.png','red.png','water.png','green.png','eye.png'),init,updateWide);
+  document.getElementById('stop').style.display="";
+  document.getElementById('resetCode').style.display="none";
+  document.getElementById('resetParams').style.display="none";
+
 
   var cookie=getParamsCookie(true,false);
   console.log('setting cookie '+cookie);
@@ -250,6 +260,50 @@ function startClicked() {
       document.getElementById('debug2_').style.display="";
     }
   }
+
+  //Hide code panel
+  var e1=document.getElementById('code');
+  var e2=document.getElementById('start')
+  e1.style.display='none';
+  e2.style.display='none';
+}
+
+function skipToStoppedState() {
+  gameMode=document.getElementById('gameMode').value;
+  width=40*document.getElementById('width').value;
+  height=40*document.getElementById('height').value;
+
+  document.getElementById('paramsForm').style.display="none";
+  document.getElementById('paramsForm_').style.display="none";
+  document.getElementById('controlPanel').style.display="";
+  document.getElementById('controlPanel_').style.display="";
+  if (gameMode=='qlearning') {
+    document.getElementById('qtable').style.display='';
+    document.getElementById('qtable_').style.display='';
+  }
+  else {
+    if (gameMode=='csv') {
+      document.getElementById('debug2').style.display="";
+      document.getElementById('debug2_').style.display="";
+    }
+  }
+
+  //Hide code panel
+  var e1=document.getElementById('code');
+  var e2=document.getElementById('start')
+  e1.style.display='none';
+  e2.style.display='none';
+  document.getElementById('restart').style.display='';
+  document.getElementById('restart').value='Start';
+  document.getElementById('retry').style.display="";
+
+  g_init(width,height,30,Array(''),function(){},function(){});
+  document.getElementById('resetCode').style.display="none";
+  document.getElementById('resetParams').style.display="none";
+
+
+  stopped=true;
+  document.getElementById('stop').style.display="none";
 }
 
 function backtrace() {
@@ -280,18 +334,8 @@ function updateWide() {
 
 //Called by the graphics abstraction layer when the resources are loaded
 function init() {
-  document.getElementById('stop').style.display="";
-  document.getElementById('resetCode').style.display="none";
-  document.getElementById('resetParams').style.display="none";
-
   //Init IA
   ia_init();
-
-  //Hide code panel
-  var e1=document.getElementById('code');
-  var e2=document.getElementById('start')
-  e1.parentNode.removeChild(e1);
-  e2.parentNode.removeChild(e2);
 
   //Create initial population
   for (var i=0; i<initialWater; i++) {

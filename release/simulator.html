@@ -70,6 +70,7 @@
 <!-- Buttons -->
 <p><input type="button" name="start" value="Start" id="start" onclick="startClicked();" />
 <input type="button" name="stop" value="Stop" id="stop" onclick="stop();" style="display: none; margin-right: 50px;" />
+<input type="button" name="restart" value="Restart" id="restart" onclick="location='#autoStart=true'; location.reload(true);" style="display: none;" />
 <input type="button" name="retry" value="Reconfigure" id="retry" onclick="location.reload(true);" style="display:none" />
 </p>
 
@@ -83,6 +84,7 @@
 <br /><input id="resetCode" type="button" value="Reset to default code" onclick="confirm('You\'ll lose all your code !') && resetCode();" />
 <div id="container" style="width: 300px;"></div>
 <div id="score"></div>
+<div id="ckoica" style="display: none;"><a href="index.html">En savoir plus</a></div>
 </div>
 
 <div id="right" class="span6">
