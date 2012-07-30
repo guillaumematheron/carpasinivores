@@ -170,6 +170,10 @@ function loaded() {
     startClicked();
   }
 
+  if (argParams!='' && argParams.search('noEditor')!=-1) {
+    document.getElementById('left').style.display='none';
+  }
+
   upMode=function(element) {document.getElementById('code').disabled=(document.getElementById('gameMode').value=='qlearning');
     document.getElementById('qLHelp').style.display=(document.getElementById('gameMode').value==='qlearning')?'':'none';
   };
