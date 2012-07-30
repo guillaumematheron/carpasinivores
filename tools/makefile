@@ -21,5 +21,5 @@ clean :
 	cd .. ; git status
 
 
-#install :
-# In the parent directory we had to run : git clone git@github.com:guillaumematheron/carpasinivores
+# Install :
+#  In the parent directory we had to run : git clone git@github.com:guillaumematheron/carpasinivores
